@@ -1,10 +1,12 @@
-﻿using Grand.Business.Core.Extensions;
+using Grand.Business.Core.Extensions;
 using Grand.Business.Core.Interfaces.Cms;
+using Grand.Business.Core.Interfaces.Common.Configuration;
 using Grand.Business.Core.Interfaces.Common.Directory;
 using Grand.Business.Core.Interfaces.Common.Localization;
-using Grand.Business.Core.Interfaces.Common.Stores;
-using Grand.Domain.Permissions;
 using Grand.Domain.News;
+using Grand.Domain.Permissions;
+using Grand.Infrastructure;
+using Grand.Web.AdminShared.Extensions;
 using Grand.Web.AdminShared.Extensions.Mapping;
 using Grand.Web.AdminShared.Interfaces;
 using Grand.Web.AdminShared.Models.News;
@@ -12,12 +14,11 @@ using Grand.Web.Common.DataSource;
 using Grand.Web.Common.Filters;
 using Grand.Web.Common.Security.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Grand.Web.Admin.Controllers;
+namespace Grand.Web.Store.Controllers;
 
 [PermissionAuthorize(PermissionSystemName.News)]
-public class NewsController : BaseAdminController
+public class NewsController : BaseStoreController
 {
     #region Constructors
 
@@ -26,15 +27,17 @@ public class NewsController : BaseAdminController
         INewsService newsService,
         ILanguageService languageService,
         ITranslationService translationService,
-        IStoreService storeService,
-        IDateTimeService dateTimeService)
+        ISettingService settingService,
+        IDateTimeService dateTimeService,
+        IContextAccessor contextAccessor)
     {
         _newsViewModelService = newsViewModelService;
         _newsService = newsService;
         _languageService = languageService;
         _translationService = translationService;
-        _storeService = storeService;
+        _settingService = settingService;
         _dateTimeService = dateTimeService;
+        _contextAccessor = contextAccessor;
     }
 
     #endregion
@@ -45,8 +48,9 @@ public class NewsController : BaseAdminController
     private readonly INewsService _newsService;
     private readonly ILanguageService _languageService;
     private readonly ITranslationService _translationService;
-    private readonly IStoreService _storeService;
+    private readonly ISettingService _settingService;
     private readonly IDateTimeService _dateTimeService;
+    private readonly IContextAccessor _contextAccessor;
 
     #endregion
 
@@ -57,15 +61,9 @@ public class NewsController : BaseAdminController
         return RedirectToAction("List");
     }
 
-    public async Task<IActionResult> List()
+    public IActionResult List()
     {
         var model = new NewsItemListModel();
-        //stores
-        model.AvailableStores.Add(new SelectListItem
-            { Text = _translationService.GetResource("Admin.Common.All"), Value = "" });
-        foreach (var s in await _storeService.GetAllStores())
-            model.AvailableStores.Add(new SelectListItem { Text = s.Shortcut, Value = s.Id });
-
         return View(model);
     }
 
@@ -73,10 +71,21 @@ public class NewsController : BaseAdminController
     [HttpPost]
     public async Task<IActionResult> List(DataSourceRequest command, NewsItemListModel model)
     {
-        var news = await _newsViewModelService.PrepareNewsItemModel(model, command.Page, command.PageSize);
+        var storeId = _contextAccessor.StoreContext.CurrentStore.Id;
+        var newsSettings = await _settingService.LoadSetting<NewsSettings>(storeId);
+
+        var news = await _newsService.GetAllNews(storeId, command.Page - 1, command.PageSize, newsTitle: model.SearchNewsTitle);
+
         var gridModel = new DataSourceResult {
-            Data = news.newsItemModels.ToList(),
-            Total = news.totalCount
+            Data = news.Select(x =>
+            {
+                var m = x.ToModel(_dateTimeService);
+                m.Full = "";
+                m.CreatedOn = _dateTimeService.ConvertToUserTime(x.CreatedOnUtc, DateTimeKind.Utc);
+                m.Comments = x.CommentCount;
+                return m;
+            }).ToList(),
+            Total = news.TotalCount
         };
         return Json(gridModel);
     }
@@ -103,7 +112,10 @@ public class NewsController : BaseAdminController
     {
         if (ModelState.IsValid)
         {
+            model.Stores = [_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId];
             var newsItem = await _newsViewModelService.InsertNewsItemModel(model);
+            await _newsService.UpdateNews(newsItem);
+
             Success(_translationService.GetResource("Admin.Content.News.NewsItems.Added"));
             return continueEditing ? RedirectToAction("Edit", new { id = newsItem.Id }) : RedirectToAction("List");
         }
@@ -120,6 +132,18 @@ public class NewsController : BaseAdminController
         if (newsItem == null)
             //No news item found with the specified id
             return RedirectToAction("List");
+
+        if (!newsItem.LimitedToStores || (newsItem.LimitedToStores &&
+                                          newsItem.Stores.Contains(_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId) &&
+                                          newsItem.Stores.Count > 1))
+        {
+            Warning(_translationService.GetResource("Admin.Content.News.Permissions"));
+        }
+        else
+        {
+            if (!newsItem.AccessToEntityByStore(_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId))
+                return RedirectToAction("List");
+        }
 
         ViewBag.AllLanguages = await _languageService.GetAllLanguages(true);
         var model = newsItem.ToModel(_dateTimeService);
@@ -147,8 +171,12 @@ public class NewsController : BaseAdminController
             //No news item found with the specified id
             return RedirectToAction("List");
 
+        if (!newsItem.AccessToEntityByStore(_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId))
+            return RedirectToAction("Edit", new { id = newsItem.Id });
+
         if (ModelState.IsValid)
         {
+            model.Stores = [_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId];
             newsItem = await _newsViewModelService.UpdateNewsItemModel(newsItem, model);
             Success(_translationService.GetResource("Admin.Content.News.NewsItems.Updated"));
 
@@ -177,6 +205,10 @@ public class NewsController : BaseAdminController
         if (newsItem == null)
             //No news item found with the specified id
             return RedirectToAction("List");
+
+        if (!newsItem.AccessToEntityByStore(_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId))
+            return RedirectToAction("List");
+
         if (ModelState.IsValid)
         {
             await _newsService.DeleteNews(newsItem);
@@ -189,40 +221,18 @@ public class NewsController : BaseAdminController
         return RedirectToAction("Edit", new { id = newsItem.Id });
     }
 
-    #endregion
-
-    #region Comments
-
-    public IActionResult Comments(string filterByNewsItemId)
+    [PermissionAuthorizeAction(PermissionActionName.Preview)]
+    public async Task<IActionResult> Preview(string id)
     {
-        ViewBag.FilterByNewsItemId = filterByNewsItemId;
-        return View();
-    }
+        var newsItem = await _newsService.GetNewsById(id);
+        if (newsItem == null)
+            return RedirectToAction("List");
 
-    [PermissionAuthorizeAction(PermissionActionName.List)]
-    [HttpPost]
-    public async Task<IActionResult> Comments(string filterByNewsItemId, DataSourceRequest command)
-    {
-        var comments = await _newsViewModelService.PrepareNewsCommentModel(filterByNewsItemId, command.Page, command.PageSize);
+        if (!newsItem.AccessToEntityByStore(_contextAccessor.WorkContext.CurrentCustomer.StaffStoreId))
+            return RedirectToAction("List");
 
-        var gridModel = new DataSourceResult {
-            Data = comments.newsCommentModels.ToList(),
-            Total = comments.totalCount
-        };
-        return Json(gridModel);
-    }
-
-    [PermissionAuthorizeAction(PermissionActionName.Delete)]
-    [HttpPost]
-    public async Task<IActionResult> CommentDelete(NewsComment model)
-    {
-        if (ModelState.IsValid)
-        {
-            await _newsViewModelService.CommentDelete(model);
-            return new JsonResult("");
-        }
-
-        return ErrorForKendoGridJson(ModelState);
+        var model = newsItem.ToModel(_dateTimeService);
+        return View(model);
     }
 
     #endregion
