@@ -194,3 +194,26 @@ variable "alarm_sns_topic_arn" {
   description = "Optional SNS topic ARN for alarm notifications"
   default     = ""
 }
+
+# --- FinOps ---
+
+# Active la création du budget AWS (alertes par email) ; mettre à true pour activer.
+variable "finops_budget_enabled" {
+  type        = bool
+  description = "Activer un budget AWS pour alertes de coût (FinOps)."
+  default     = false
+}
+
+# Montant mensuel du budget en USD — seuil utilisé pour les alertes 80 % / 100 % / 120 %.
+variable "finops_budget_amount_usd" {
+  type        = number
+  description = "Montant mensuel du budget en USD (utilisé si finops_budget_enabled = true)."
+  default     = 100
+}
+
+# Adresses email qui reçoivent les alertes de dépassement ; au moins une requise si le budget est activé.
+variable "finops_budget_alert_emails" {
+  type        = list(string)
+  description = "Liste d'emails pour recevoir les alertes de dépassement de budget."
+  default     = []
+}
