@@ -1,3 +1,4 @@
+# Groupe de sécurité de l'ALB — autorise entrée HTTP (80) et HTTPS (443) depuis Internet ; sortie illimitée.
 resource "aws_security_group" "alb" {
   name        = "${local.name}-alb"
   description = "ALB security group"
@@ -23,6 +24,7 @@ resource "aws_security_group" "alb" {
   tags = local.tags
 }
 
+# Groupe de sécurité des tâches ECS — entrée uniquement depuis l'ALB sur le port du conteneur ; sortie illimitée.
 resource "aws_security_group" "ecs" {
   name        = "${local.name}-ecs"
   description = "ECS tasks security group"
@@ -42,6 +44,7 @@ resource "aws_security_group" "ecs" {
   tags = local.tags
 }
 
+# Groupe de sécurité DocumentDB — entrée MongoDB (27017) uniquement depuis les tâches ECS ; sortie illimitée.
 resource "aws_security_group" "docdb" {
   name        = "${local.name}-docdb"
   description = "DocumentDB security group"
@@ -61,6 +64,7 @@ resource "aws_security_group" "docdb" {
   tags = local.tags
 }
 
+# Groupe de sécurité Redis (ElastiCache) — entrée port 6379 uniquement depuis les tâches ECS ; sortie illimitée.
 resource "aws_security_group" "redis" {
   name        = "${local.name}-redis"
   description = "Redis security group"

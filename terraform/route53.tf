@@ -1,3 +1,4 @@
+# Enregistrement A (alias) pointant le domaine principal vers l'ALB — actif si zone_id et domain_name sont renseignés.
 resource "aws_route53_record" "alb" {
   count   = var.route53_zone_id != "" && var.domain_name != "" ? 1 : 0
   zone_id = var.route53_zone_id
@@ -11,6 +12,7 @@ resource "aws_route53_record" "alb" {
   }
 }
 
+# Enregistrement A (alias) pointant un sous-domaine vers CloudFront (médias) — actif si zone_id et cloudfront_domain_aliases sont renseignés.
 resource "aws_route53_record" "cloudfront" {
   count   = var.route53_zone_id != "" && length(var.cloudfront_domain_aliases) > 0 ? 1 : 0
   zone_id = var.route53_zone_id
