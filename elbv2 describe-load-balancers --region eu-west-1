@@ -1,0 +1,122 @@
+{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-056a3a60deb308547",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "VpcId": "vpc-0f291cb11cb93062f",
+            "SecurityGroupArn": "arn:aws:ec2:eu-west-1:622333992348:security-group/sg-056a3a60deb308547",
+            "OwnerId": "622333992348",
+            "GroupName": "default",
+            "Description": "default VPC security group",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [
+                        {
+                            "UserId": "622333992348",
+                            "GroupId": "sg-056a3a60deb308547"
+                        }
+                    ],
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        },
+        {
+            "GroupId": "sg-0be1ecaad306b5507",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "ingress.k8s.aws/resource",
+                    "Value": "ManagedLBSecurityGroup"
+                },
+                {
+                    "Key": "ingress.k8s.aws/stack",
+                    "Value": "grandnode2/grandnode2"
+                },
+                {
+                    "Key": "elbv2.k8s.aws/cluster",
+                    "Value": "black-friday-survival-dev-eks"
+                }
+            ],
+            "VpcId": "vpc-0f291cb11cb93062f",
+            "SecurityGroupArn": "arn:aws:ec2:eu-west-1:622333992348:security-group/sg-0be1ecaad306b5507",
+            "OwnerId": "622333992348",
+            "GroupName": "k8s-grandnod-grandnod-2cafff381c",
+            "Description": "[k8s] Managed SecurityGroup for LoadBalancer",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 80,
+                    "ToPort": 80,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "Description": "",
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        },
+        {
+            "GroupId": "sg-0aafa379c27979a4f",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "elbv2.k8s.aws/resource",
+                    "Value": "backend-sg"
+                },
+                {
+                    "Key": "elbv2.k8s.aws/cluster",
+                    "Value": "black-friday-survival-dev-eks"
+                }
+            ],
+            "VpcId": "vpc-0f291cb11cb93062f",
+            "SecurityGroupArn": "arn:aws:ec2:eu-west-1:622333992348:security-group/sg-0aafa379c27979a4f",
+            "OwnerId": "622333992348",
+            "GroupName": "k8s-traffic-blackfridaysurvivaldeveks-ff54f3f9b9",
+            "Description": "[k8s] Shared Backend SecurityGroup for LoadBalancer",
+            "IpPermissions": []
+        }
+    ]
+}

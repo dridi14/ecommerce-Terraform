@@ -60,6 +60,10 @@ MONGODB_ENABLED="${MONGODB_ENABLED:-true}"
 MONGODB_USERNAME="${MONGODB_USERNAME:-grandnodeadmin}"
 MONGODB_PASSWORD="${MONGODB_PASSWORD:-ChangeMeMongoPass123}"
 MONGODB_DATABASE="${MONGODB_DATABASE:-grandnode2}"
+MONGODB_PERSISTENCE_ENABLED="${MONGODB_PERSISTENCE_ENABLED:-true}"
+MONGODB_PERSISTENCE_SIZE="${MONGODB_PERSISTENCE_SIZE:-50Gi}"
+DB_PROVIDER="${DB_PROVIDER:-0}"
+INSTALLER_ENABLED="${INSTALLER_ENABLED:-true}"
 
 if [[ "${MONGODB_ENABLED}" == "true" ]]; then
   helm repo add bitnami https://charts.bitnami.com/bitnami >/dev/null 2>&1 || true
@@ -73,7 +77,8 @@ if [[ "${MONGODB_ENABLED}" == "true" ]]; then
     --set auth.usernames[0]="${MONGODB_USERNAME}" \
     --set auth.passwords[0]="${MONGODB_PASSWORD}" \
     --set auth.databases[0]="${MONGODB_DATABASE}" \
-    --set persistence.enabled=false
+    --set persistence.enabled="${MONGODB_PERSISTENCE_ENABLED}" \
+    --set persistence.size="${MONGODB_PERSISTENCE_SIZE}"
 fi
 
 if [[ -z "${DB_CONNECTION_STRING:-}" ]]; then
@@ -85,7 +90,10 @@ helm upgrade --install grandnode2 "${ROOT_DIR}/k8s/grandnode2" \
   --set image.repository="${IMAGE_REPOSITORY}" \
   --set image.tag="${IMAGE_TAG}" \
   --set env.ASPNETCORE_ENVIRONMENT="${ASPNETCORE_ENVIRONMENT}" \
-  --set env.DB_CONNECTION_STRING="${DB_CONNECTION_STRING}"
+  --set env.DB_CONNECTION_STRING="${DB_CONNECTION_STRING}" \
+  --set env.CONNECTIONSTRINGS_MONGODB="${DB_CONNECTION_STRING}" \
+  --set env.CONNECTIONSTRINGS_PROVIDER="${DB_PROVIDER}" \
+  --set env.FEATURE_INSTALLER="${INSTALLER_ENABLED}"
 
 echo "Deployment complete."
 echo "EKS cluster name: ${CLUSTER_NAME}"
