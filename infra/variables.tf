@@ -42,25 +42,25 @@ variable "kubernetes_version" {
 variable "node_instance_types" {
   description = "EC2 instance types for EKS managed node group."
   type        = list(string)
-  default     = ["t3.large"]
+  default     = ["m5.xlarge"]
 }
 
 variable "node_desired_size" {
   description = "Desired number of EKS worker nodes."
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "node_min_size" {
   description = "Minimum number of EKS worker nodes."
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "node_max_size" {
   description = "Maximum number of EKS worker nodes."
   type        = number
-  default     = 15
+  default     = 12
 }
 
 variable "cluster_log_retention_in_days" {

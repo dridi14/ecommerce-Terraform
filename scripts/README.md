@@ -81,6 +81,10 @@ Optional overrides:
 - `MONGODB_USERNAME` (default `grandnodeadmin`)
 - `MONGODB_PASSWORD` (default `ChangeMeMongoPass123`, change this)
 - `MONGODB_DATABASE` (default `grandnode2`)
+- `MONGODB_PERSISTENCE_ENABLED` (default `true`)
+- `MONGODB_PERSISTENCE_SIZE` (default `50Gi`)
+- `DB_PROVIDER` (default `0` for MongoDB)
+- `INSTALLER_ENABLED` (`true` for first install, then `false` after GrandNode is installed)
 
 Example:
 
@@ -90,8 +94,24 @@ export IMAGE_REPOSITORY=123456789012.dkr.ecr.eu-west-1.amazonaws.com/grandnode2
 export IMAGE_TAG=latest
 export BUILD_IMAGE=true
 export ASPNETCORE_ENVIRONMENT=Production
-export DB_CONNECTION_STRING='mongodb://user:pass@host:27017/grandnode2?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false'
+export MONGODB_ENABLED=true
+export MONGODB_USERNAME=grandnodeadmin
+export MONGODB_PASSWORD='ChangeMeMongoPass123'
+export MONGODB_DATABASE=grandnode2
+export MONGODB_PERSISTENCE_ENABLED=true
+export MONGODB_PERSISTENCE_SIZE=50Gi
+export INSTALLER_ENABLED=true
 ```
+
+Current default sizing in this repo is a stronger baseline than the original dev profile:
+
+- EKS worker nodes default to `m5.xlarge`
+- node group defaults to `4` nodes min/desired
+- GrandNode chart defaults to `4` replicas
+- HPA is enabled by default for CPU and memory
+- MongoDB persistence is enabled by default
+
+For HPA to work, your cluster also needs the Kubernetes `metrics-server` installed.
 
 ## 5) Check Helm Chart Placeholders
 

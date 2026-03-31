@@ -382,3 +382,28 @@ src/Web/Grand.Web.Store/Plugins/*
 src/Web/Grand.Web.Store/Modules/*
 src/Web/Grand.Web.Store/App_Data/DataProtectionKeys/*
 src/Web/Grand.Web.Store/wwwroot/assets/images/thumbs/*.**
+
+#######################
+## Local env / Terraform
+#######################
+.env
+.env.local
+.env.*.local
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+**/.terraform/*
+
+#######################
+## Local scratch files
+#######################
+infra/docdb reboot-db-instance --db-instance-identifier instance-id --region eu-west-1
+infra/eks list-nodegroups --cluster-name black-friday-survival-dev-eks --region eu-west-1
+infra/eks wait cluster-deleted 
+infra/tances (replace with your instance id if needed)

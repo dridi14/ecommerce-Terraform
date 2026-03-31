@@ -6,7 +6,14 @@ metadata:
   labels:
     app: grandnode2
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.deploymentStrategy.maxUnavailable }}
+      maxSurge: {{ .Values.deploymentStrategy.maxSurge }}
+{{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       app: grandnode2
@@ -26,6 +33,12 @@ spec:
               value: "{{ .Values.env.ASPNETCORE_ENVIRONMENT }}"
             - name: DB_CONNECTION_STRING
               value: "{{ .Values.env.DB_CONNECTION_STRING }}"
+            - name: ConnectionStrings__Mongodb
+              value: "{{ .Values.env.CONNECTIONSTRINGS_MONGODB }}"
+            - name: ConnectionStrings__Provider
+              value: "{{ .Values.env.CONNECTIONSTRINGS_PROVIDER }}"
+            - name: FeatureManagement__Grand.Module.Installer
+              value: "{{ .Values.env.FEATURE_INSTALLER }}"
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu | quote }}
