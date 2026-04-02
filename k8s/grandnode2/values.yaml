@@ -29,6 +29,26 @@ resources:
     cpu: "2000m"
     memory: "2Gi"
 
+probes:
+  readiness:
+    enabled: true
+    type: tcp
+    port: 8080
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 6
+  liveness:
+    enabled: true
+    type: tcp
+    port: 8080
+    path: /
+    initialDelaySeconds: 30
+    periodSeconds: 20
+    timeoutSeconds: 2
+    failureThreshold: 6
+
 deploymentStrategy:
   maxUnavailable: 0
   maxSurge: 1

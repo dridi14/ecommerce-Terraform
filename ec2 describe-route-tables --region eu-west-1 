@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------------------------------------------------------------
+|                                                      DescribeSecurityGroups                                                       |
++----------------------+----------------------------------------------------+-------------------------------------------------------+
+|  [1m[34msg-0d5eb338a8460b014[0m|  [1m[34mk8s-default-grandnod-c71d1f2a2b[0m                   |  [1m[34m[k8s] Managed SecurityGroup for LoadBalancer[0m         |
+|  [1m[34msg-0930f92ee6a00c706[0m|  [1m[34mk8s-grandnod-grandnod-2cafff381c[0m                  |  [1m[34m[k8s] Managed SecurityGroup for LoadBalancer[0m         |
+|  [1m[34msg-0ba97351aeb7b3a13[0m|  [1m[34mk8s-traffic-blackfridaysurvivaldeveks-ff54f3f9b9[0m  |  [1m[34m[k8s] Shared Backend SecurityGroup for LoadBalancer[0m  |
+|  [1m[34msg-0a1d793e640c93f67[0m|  [1m[34mdefault[0m                                           |  [1m[34mdefault VPC security group[0m                           |
++----------------------+----------------------------------------------------+-------------------------------------------------------+
+-------------------------------------------------------------------------------------------------------------------------------------
+|                                                      DescribeSecurityGroups                                                       |
++----------------------+----------------------------------------------------+-------------------------------------------------------+
+|  [1m[34msg-0d5eb338a8460b014[0m|  [1m[34mk8s-default-grandnod-c71d1f2a2b[0m                   |  [1m[34m[k8s] Managed SecurityGroup for LoadBalancer[0m         |
+|  [1m[34msg-0930f92ee6a00c706[0m|  [1m[34mk8s-grandnod-grandnod-2cafff381c[0m                  |  [1m[34m[k8s] Managed SecurityGroup for LoadBalancer[0m         |
+|  [1m[34msg-0ba97351aeb7b3a13[0m|  [1m[34mk8s-traffic-blackfridaysurvivaldeveks-ff54f3f9b9[0m  |  [1m[34m[k8s] Shared Backend SecurityGroup for LoadBalancer[0m  |
+|  [1m[34msg-0a1d793e640c93f67[0m|  [1m[34mdefault[0m                                           |  [1m[34mdefault VPC security group[0m                           |
++----------------------+----------------------------------------------------+-------------------------------------------------------+

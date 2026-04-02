@@ -46,3 +46,33 @@ spec:
             limits:
               cpu: {{ .Values.resources.limits.cpu | quote }}
               memory: {{ .Values.resources.limits.memory | quote }}
+          {{- if .Values.probes.readiness.enabled }}
+          readinessProbe:
+            {{- if eq .Values.probes.readiness.type "http" }}
+            httpGet:
+              path: {{ .Values.probes.readiness.path | quote }}
+              port: {{ .Values.probes.readiness.port }}
+            {{- else }}
+            tcpSocket:
+              port: {{ .Values.probes.readiness.port }}
+            {{- end }}
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.readiness.failureThreshold }}
+          {{- end }}
+          {{- if .Values.probes.liveness.enabled }}
+          livenessProbe:
+            {{- if eq .Values.probes.liveness.type "http" }}
+            httpGet:
+              path: {{ .Values.probes.liveness.path | quote }}
+              port: {{ .Values.probes.liveness.port }}
+            {{- else }}
+            tcpSocket:
+              port: {{ .Values.probes.liveness.port }}
+            {{- end }}
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          {{- end }}

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ENV="${1:-dev}"
-AWS_REGION="${AWS_REGION:-eu-west-1}"
+AWS_REGION="${AWS_REGION:-eu-west-3}"
 
 export ENV
 export AWS_REGION
@@ -14,22 +14,55 @@ IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-my-ecr-or-dockerhub/grandnode2}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 DOCKERFILE_PATH="${DOCKERFILE_PATH:-${ROOT_DIR}/Dockerfile}"
 BUILD_CONTEXT="${BUILD_CONTEXT:-${ROOT_DIR}}"
+INSTALL_METRICS_SERVER="${INSTALL_METRICS_SERVER:-true}"
+METRICS_SERVER_MANIFEST_URL="${METRICS_SERVER_MANIFEST_URL:-https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml}"
+AUTO_INSTALL_EBS_CSI="${AUTO_INSTALL_EBS_CSI:-true}"
+WAIT_FOR_ALB_WEBHOOK="${WAIT_FOR_ALB_WEBHOOK:-true}"
 
-echo "Starting deployment for ENV=${ENV} in AWS_REGION=${AWS_REGION}"
+log() {
+  echo "[$(date +'%H:%M:%S')] $*"
+}
+
+log "Starting deployment for ENV=${ENV} in AWS_REGION=${AWS_REGION}"
 
 cd "${INFRA_DIR}"
+log "Terraform init"
 terraform init
+log "Terraform apply"
 terraform apply -auto-approve \
   -var="env=${ENV}" \
   -var="aws_region=${AWS_REGION}"
 
 CLUSTER_NAME="$(terraform output -raw eks_cluster_name)"
-echo "Using EKS cluster: ${CLUSTER_NAME}"
+log "Using EKS cluster: ${CLUSTER_NAME}"
 
+log "Updating kubeconfig"
 aws eks update-kubeconfig --region "${AWS_REGION}" --name "${CLUSTER_NAME}"
 
+if [[ "${AUTO_INSTALL_EBS_CSI}" == "true" ]]; then
+  if ! kubectl get csidriver ebs.csi.aws.com >/dev/null 2>&1; then
+    log "EBS CSI driver not detected. Installing addon..."
+    aws eks create-addon --cluster-name "${CLUSTER_NAME}" --addon-name aws-ebs-csi-driver --region "${AWS_REGION}" || true
+  else
+    log "EBS CSI driver detected."
+  fi
+else
+  log "AUTO_INSTALL_EBS_CSI=false (skipping EBS CSI addon install)."
+fi
+
+if [[ "${INSTALL_METRICS_SERVER}" == "true" ]]; then
+  if ! kubectl get deployment metrics-server -n kube-system >/dev/null 2>&1; then
+    log "Installing metrics-server"
+    kubectl apply -f "${METRICS_SERVER_MANIFEST_URL}"
+  else
+    log "metrics-server already installed"
+  fi
+else
+  log "INSTALL_METRICS_SERVER=false (skipping metrics-server install)."
+fi
+
 if [[ "${BUILD_IMAGE}" == "true" ]]; then
-  echo "BUILD_IMAGE=true: building and pushing ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
+  log "BUILD_IMAGE=true: building and pushing ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
 
   if [[ "${IMAGE_REPOSITORY}" == *.dkr.ecr.*.amazonaws.com/* ]]; then
     ECR_REGISTRY="$(echo "${IMAGE_REPOSITORY}" | cut -d'/' -f1)"
@@ -41,6 +74,7 @@ if [[ "${BUILD_IMAGE}" == "true" ]]; then
 fi
 
 if ! helm status aws-load-balancer-controller -n kube-system >/dev/null 2>&1; then
+  log "Installing AWS Load Balancer Controller"
   helm repo add eks https://aws.github.io/eks-charts
   helm repo update
 
@@ -51,6 +85,21 @@ if ! helm status aws-load-balancer-controller -n kube-system >/dev/null 2>&1; th
     --set clusterName="${CLUSTER_NAME}" \
     --set serviceAccount.create=true \
     --set serviceAccount.name=aws-load-balancer-controller
+fi
+
+if [[ "${WAIT_FOR_ALB_WEBHOOK}" == "true" ]]; then
+  log "Waiting for AWS Load Balancer Controller rollout"
+  kubectl rollout status deployment/aws-load-balancer-controller -n kube-system --timeout=300s || true
+  log "Waiting for ALB webhook endpoints"
+  for i in {1..30}; do
+    if kubectl get endpoints aws-load-balancer-webhook-service -n kube-system >/dev/null 2>&1; then
+      EP_COUNT="$(kubectl get endpoints aws-load-balancer-webhook-service -n kube-system -o jsonpath='{.subsets[*].addresses[*].ip}' | wc -w | tr -d ' ')"
+      if [[ "${EP_COUNT}" != "0" ]]; then
+        break
+      fi
+    fi
+    sleep 5
+  done
 fi
 
 kubectl get namespace grandnode2 >/dev/null 2>&1 || kubectl create namespace grandnode2
@@ -66,6 +115,7 @@ DB_PROVIDER="${DB_PROVIDER:-0}"
 INSTALLER_ENABLED="${INSTALLER_ENABLED:-true}"
 
 if [[ "${MONGODB_ENABLED}" == "true" ]]; then
+  log "Installing/Upgrading MongoDB"
   helm repo add bitnami https://charts.bitnami.com/bitnami >/dev/null 2>&1 || true
   helm repo update >/dev/null 2>&1
 
@@ -85,6 +135,7 @@ if [[ -z "${DB_CONNECTION_STRING:-}" ]]; then
   DB_CONNECTION_STRING="mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb.grandnode2.svc.cluster.local:27017/${MONGODB_DATABASE}?authSource=${MONGODB_DATABASE}"
 fi
 
+log "Installing/Upgrading GRANDNODE2"
 helm upgrade --install grandnode2 "${ROOT_DIR}/k8s/grandnode2" \
   -n grandnode2 \
   --set image.repository="${IMAGE_REPOSITORY}" \
@@ -95,6 +146,6 @@ helm upgrade --install grandnode2 "${ROOT_DIR}/k8s/grandnode2" \
   --set env.CONNECTIONSTRINGS_PROVIDER="${DB_PROVIDER}" \
   --set env.FEATURE_INSTALLER="${INSTALLER_ENABLED}"
 
-echo "Deployment complete."
-echo "EKS cluster name: ${CLUSTER_NAME}"
-echo "Reminder: check the ALB DNS name with: kubectl get ingress -n grandnode2"
+log "Deployment complete."
+log "EKS cluster name: ${CLUSTER_NAME}"
+log "Reminder: check the ALB DNS name with: kubectl get ingress -n grandnode2"

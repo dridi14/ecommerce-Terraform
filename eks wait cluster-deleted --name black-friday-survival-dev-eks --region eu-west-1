@@ -1,0 +1,72 @@
+{
+    "cluster": {
+        "name": "black-friday-survival-dev-eks",
+        "arn": "arn:aws:eks:eu-west-1:622333992348:cluster/black-friday-survival-dev-eks",
+        "createdAt": "2026-03-31T09:47:24.195000+02:00",
+        "version": "1.29",
+        "endpoint": "https://A48E79C367A0891BDC379BA1274F15E5.yl4.eu-west-1.eks.amazonaws.com",
+        "roleArn": "arn:aws:iam::622333992348:role/black-friday-survival-dev-eks-cluster-role",
+        "resourcesVpcConfig": {
+            "subnetIds": [
+                "subnet-0b95c1c9bace5f25e",
+                "subnet-01f37d29f2df053c1",
+                "subnet-0831d7aac597f1b38"
+            ],
+            "securityGroupIds": [],
+            "clusterSecurityGroupId": "sg-0329a2213b1e30c11",
+            "vpcId": "vpc-03882ef8c26d93380",
+            "endpointPublicAccess": true,
+            "endpointPrivateAccess": true,
+            "publicAccessCidrs": [
+                "0.0.0.0/0"
+            ]
+        },
+        "kubernetesNetworkConfig": {
+            "serviceIpv4Cidr": "172.20.0.0/16",
+            "ipFamily": "ipv4",
+            "elasticLoadBalancing": {
+                "enabled": false
+            }
+        },
+        "logging": {
+            "clusterLogging": [
+                {
+                    "types": [
+                        "api",
+                        "audit",
+                        "authenticator",
+                        "controllerManager",
+                        "scheduler"
+                    ],
+                    "enabled": true
+                }
+            ]
+        },
+        "identity": {
+            "oidc": {
+                "issuer": "https://oidc.eks.eu-west-1.amazonaws.com/id/A48E79C367A0891BDC379BA1274F15E5"
+            }
+        },
+        "status": "DELETING",
+        "certificateAuthority": {
+            "data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJUDg0b2RKUmNzVjB3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TmpBek16RXdOelEyTURWYUZ3MHpOakF6TWpnd056VXhNRFZhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUQ4UjUyS3JBQWY3c05JNXo1M01kd25rWjhyTWU5Sys1UmNERko1N2FMSVVwRmFTUUd2cGRvUFQ3aGgKUzRyallTbUtGd28yZnJ0RGU1VnBsS0RCZTREdkZXdDFFeDNTbmtSQmU1dVhwb3ZJekZGRzh4bVo4eHlBTmN4TgpMY1VyaEFaTjFLbGI0QUs1eTc2Y3hqTlFJUFk3MGhwdkN0c1JlV1YycmlxQXNnbHUvQ2cyR2lEbEVTYmFrVXZhCjRWSUJ3SGtna2lBQUpROFBFVUpJQ1lGWVBRbHFTRmtSOFNtaXdLMXpUTVp6dkIyZ3BDTk5JYit6T3ozelF2NDEKVzZBNUJPbzNjY2lOUUNvNy9ORFdVK1p3SGVtbmdTbkx0eGhNWkdtQ2xCaERSVElUZnR3NVBmWG9vQ3p2d2x4VQpsS2RXYVYydCtyVjAzLzF2REk2alRlN1RLZDVmQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUamwrUTB2cTdvWk5VbjAwbHhjZkhWRWNyem9qQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQnpNMnRMKzlOSwo5dGRrUjN5MHhlaWg2TXowdDVJNjF6Y1JLTWlQMGxQNGJ4ZXlZMGJrN0xqM3ZDS2NmL3ZMNWlsdzh1ZldvZ015ClBSQTRJTkR0dFh2ZmxYakdRWUZtMjZ5T08rY01ZdWNVMmZ2NXNNYTU1MGpEc1N0RkxYM2tsR3NtTCtBdUtJV2gKTXhOcXJOS0VVd2J3cDF6Mi9rVUhhT05DcFRvTnQ4ZU81NDZkS2R0K0o0SEZzd3RVMnovb1hBMXZ4d2drUkh6eQpvb09qMml3TElUUmRmUEZ4dEFBRG1HdVdoTEFKMHN0TUYzdkJBbUhRRjhaM05oWFdLOHNCUlJKWWZ6akEwWmRpCjZ4bDV3YzhvZTRTZlFwcU5lVDBlbHR4ODhpemdFSWJsbXdsS0lOVjlvZ25mOHRGQVc4U1pIME1pbGlibUF0dG0KclJKcDNLaGtXdHBXCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+        },
+        "platformVersion": "eks.67",
+        "tags": {
+            "Project": "black-friday-survival",
+            "Environment": "dev",
+            "ManagedBy": "Terraform",
+            "Name": "black-friday-survival-dev-eks"
+        },
+        "accessConfig": {
+            "authenticationMode": "CONFIG_MAP"
+        },
+        "upgradePolicy": {
+            "supportType": "EXTENDED"
+        },
+        "deletionProtection": false,
+        "controlPlaneScalingConfig": {
+            "tier": "standard"
+        }
+    }
+}

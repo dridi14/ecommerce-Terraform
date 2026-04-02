@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------------------------
+|                                   DescribeNetworkInterfaces                                   |
++------------------------+------------------------------------------------------------+---------+
+|  [1m[34meni-0404b421cc4975e70[0m |  [1m[34mELB net/k8s-default-grandnod-2d3312b237/d0e95124ea195560[0m  |  [1m[34min-use[0m |
+|  [1m[34meni-06197c8508c3e8b4d[0m |  [1m[34mELB net/k8s-default-grandnod-2d3312b237/d0e95124ea195560[0m  |  [1m[34min-use[0m |
+|  [1m[34meni-0650958c202462345[0m |  [1m[34mAmazon EKS black-friday-survival-dev-eks[0m                  |  [1m[34min-use[0m |
+|  [1m[34meni-0fc23c4f38f77de5e[0m |  [1m[34mAmazon EKS black-friday-survival-dev-eks[0m                  |  [1m[34min-use[0m |
+|  [1m[34meni-02a98738a314a09b1[0m |  [1m[34mELB net/k8s-default-grandnod-2d3312b237/d0e95124ea195560[0m  |  [1m[34min-use[0m |
++------------------------+------------------------------------------------------------+---------+
