@@ -56,7 +56,14 @@ data "aws_ami" "ubuntu_2204" {
 resource "aws_security_group" "load_test" {
   name        = "${var.project_name}-load-test-sg"
   description = "Allow SSH access for load test instance"
-  vpc_id      = data.aws_subnet.selected.vpc_id
+  vpc_id      = var.vpc_id
+
+  lifecycle {
+    precondition {
+      condition     = data.aws_subnet.selected.vpc_id == var.vpc_id
+      error_message = "The selected subnet_id does not belong to the configured vpc_id."
+    }
+  }
 
   ingress {
     description = "SSH from trusted IP"
@@ -105,11 +112,20 @@ resource "null_resource" "copy_storefront_script" {
     user        = "ubuntu"
     host        = aws_instance.load_test.public_ip
     private_key = file(var.private_key_path)
+    timeout     = "10m"
   }
 
   provisioner "file" {
     source      = var.k6_script_local_path
     destination = "/home/ubuntu/storefront.js"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir -p /opt/load-tests",
+      "sudo mv /home/ubuntu/storefront.js /opt/load-tests/storefront.js",
+      "sudo chown ubuntu:ubuntu /opt/load-tests/storefront.js"
+    ]
   }
 }
 
@@ -135,12 +151,11 @@ resource "null_resource" "run_k6" {
     user        = "ubuntu"
     host        = aws_instance.load_test.public_ip
     private_key = file(var.private_key_path)
+    timeout     = "10m"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo mkdir -p /opt/load-tests",
-      "sudo mv /home/ubuntu/storefront.js /opt/load-tests/storefront.js",
       "cd /opt/load-tests",
       "k6 run -e BASE_URL=${local.target_base_url_effective} storefront.js"
     ]

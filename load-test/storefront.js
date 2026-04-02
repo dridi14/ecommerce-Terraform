@@ -1,7 +1,61 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-const BASE_URL = __ENV.BASE_URL || 'http://127.0.0.1:8080';
+const BASE_URL = (__ENV.BASE_URL || 'http://127.0.0.1:8080').replace(/\/+$/, '');
+const TEST_PROFILE = __ENV.TEST_PROFILE || '200';
+
+const PROFILE_TOTAL_VUS = {
+  200: 200,
+  1000: 1000,
+  5000: 5000,
+  20000: 20000,
+  50000: 50000,
+  70000: 70000,
+  90000: 90000,
+};
+
+function resolveTotalVus() {
+  if (__ENV.TOTAL_VUS) {
+    const parsed = Number.parseInt(__ENV.TOTAL_VUS, 10);
+    if (!Number.isNaN(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+
+  const mappedProfile = PROFILE_TOTAL_VUS[TEST_PROFILE];
+  if (mappedProfile) {
+    return mappedProfile;
+  }
+
+  throw new Error(
+    `Unsupported TEST_PROFILE "${TEST_PROFILE}". Supported values: ${Object.keys(PROFILE_TOTAL_VUS).join(', ')}`
+  );
+}
+
+function splitScenarioTargets(totalVus) {
+  const browseCatalog = Math.floor(totalVus * 0.60);
+  const searchProducts = Math.floor(totalVus * 0.25);
+  const addToCart = Math.floor(totalVus * 0.10);
+  const checkoutGuest = totalVus - browseCatalog - searchProducts - addToCart;
+
+  return {
+    browseCatalog,
+    searchProducts,
+    addToCart,
+    checkoutGuest,
+  };
+}
+
+const totalVus = resolveTotalVus();
+const scenarioTargets = splitScenarioTargets(totalVus);
+
+function createStages(target) {
+  return [
+    { duration: '1m', target },
+    { duration: '2m', target },
+    { duration: '1m', target: 0 },
+  ];
+}
 
 /**
  * setup() - Récupère les IDs des produits spécifiques
@@ -9,6 +63,9 @@ const BASE_URL = __ENV.BASE_URL || 'http://127.0.0.1:8080';
  * S'exécute en <5 secondes
  */
 export function setup() {
+  console.log(
+    `Running TEST_PROFILE=${TEST_PROFILE}, TOTAL_VUS=${totalVus}, split=${JSON.stringify(scenarioTargets)}`
+  );
   console.log('🔍 Loading specific products...');
 
   const products = [];
@@ -99,44 +156,28 @@ export const options = {
       executor: 'ramping-vus',
       exec: 'browseCatalog',
       startVUs: 0,
-      stages: [
-        { duration: '1m', target: 120 },
-        { duration: '2m', target: 120 },
-        { duration: '1m', target: 0 },
-      ],
+      stages: createStages(scenarioTargets.browseCatalog),
     },
 
     search_products: {
       executor: 'ramping-vus',
       exec: 'searchProducts',
       startVUs: 0,
-      stages: [
-        { duration: '1m', target: 50 },
-        { duration: '2m', target: 50 },
-        { duration: '1m', target: 0 },
-      ],
+      stages: createStages(scenarioTargets.searchProducts),
     },
 
     add_to_cart: {
       executor: 'ramping-vus',
       exec: 'addToCart',
       startVUs: 0,
-      stages: [
-        { duration: '1m', target: 20 },
-        { duration: '2m', target: 20 },
-        { duration: '1m', target: 0 },
-      ],
+      stages: createStages(scenarioTargets.addToCart),
     },
 
     checkout_guest: {
       executor: 'ramping-vus',
       exec: 'checkoutGuest',
       startVUs: 0,
-      stages: [
-        { duration: '1m', target: 10 },
-        { duration: '2m', target: 10 },
-        { duration: '1m', target: 0 },
-      ],
+      stages: createStages(scenarioTargets.checkoutGuest),
     },
   },
 
