@@ -49,12 +49,14 @@ function splitScenarioTargets(totalVus) {
 const totalVus = resolveTotalVus();
 const scenarioTargets = splitScenarioTargets(totalVus);
 
-function createStages(target) {
-  return [
-    { duration: '1m', target },
-    { duration: '2m', target },
-    { duration: '1m', target: 0 },
-  ];
+function createScenario(vus, exec) {
+  return {
+    executor: 'per-vu-iterations',
+    exec,
+    vus,
+    iterations: 1,
+    maxDuration: '10m',
+  };
 }
 
 /**
@@ -152,33 +154,10 @@ function pick(arr) {
 
 export const options = {
   scenarios: {
-    browse_catalog: {
-      executor: 'ramping-vus',
-      exec: 'browseCatalog',
-      startVUs: 0,
-      stages: createStages(scenarioTargets.browseCatalog),
-    },
-
-    search_products: {
-      executor: 'ramping-vus',
-      exec: 'searchProducts',
-      startVUs: 0,
-      stages: createStages(scenarioTargets.searchProducts),
-    },
-
-    add_to_cart: {
-      executor: 'ramping-vus',
-      exec: 'addToCart',
-      startVUs: 0,
-      stages: createStages(scenarioTargets.addToCart),
-    },
-
-    checkout_guest: {
-      executor: 'ramping-vus',
-      exec: 'checkoutGuest',
-      startVUs: 0,
-      stages: createStages(scenarioTargets.checkoutGuest),
-    },
+    browse_catalog: createScenario(scenarioTargets.browseCatalog, 'browseCatalog'),
+    search_products: createScenario(scenarioTargets.searchProducts, 'searchProducts'),
+    add_to_cart: createScenario(scenarioTargets.addToCart, 'addToCart'),
+    checkout_guest: createScenario(scenarioTargets.checkoutGuest, 'checkoutGuest'),
   },
 
   thresholds: {
