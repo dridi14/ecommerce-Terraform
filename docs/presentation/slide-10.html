@@ -1,1046 +1,336 @@
-<!DOCTYPE html>
-
-
-
-
-
-<html lang="fr">
-
-
-
-
-
-<head>
-
-
-    <meta charset="utf-8" />
-
-
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-
-
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&amp;display=swap"
-        rel="stylesheet" />
-
-
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-    <style>
-        body {
-
-
-            font-family: 'Roboto', sans-serif;
-
-
-            margin: 0;
-
-
-            padding: 0;
-
-
-            overflow: hidden;
-
-
-        }
-
-
-
-
-
-        .bg-aws-dark {
-
-
-            background-color: #232F3E;
-
-
-        }
-
-
-
-
-
-        .bg-aws-darker {
-
-
-            background-color: #131A22;
-
-
-        }
-
-
-
-
-
-        .bg-aws-light {
-
-
-            background-color: #F2F3F3;
-
-
-        }
-
-
-
-
-
-        .text-aws-dark {
-
-
-            color: #232F3E;
-
-
-        }
-
-
-
-
-
-        .text-aws-orange {
-
-
-            color: #FF9900;
-
-
-        }
-
-
-
-
-
-        .bg-aws-orange {
-
-
-            background-color: #FF9900;
-
-
-        }
-
-
-
-
-
-        .border-aws-orange {
-
-
-            border-color: #FF9900;
-
-
-        }
-
-
-
-
-
-        .card-shadow {
-
-
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-
-        }
-
-
-
-
-
-        /* Specific Styles for Post Mortem */
-
-
-        .analysis-card {
-
-
-            transition: all 0.3s ease;
-
-
-        }
-
-
-
-
-
-        .analysis-card:hover {
-
-
-            transform: translateY(-4px);
-
-
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-
-
-        }
-
-
-
-
-
-        .win-card {
-
-
-            border-top: 4px solid #10B981;
-
-
-        }
-
-
-
-
-
-        .gap-card {
-
-
-            border-top: 4px solid #EF4444;
-
-
-        }
-
-
-
-
-
-        .learn-card {
-
-
-            border-top: 4px solid #3B82F6;
-
-
-        }
-
-
-
-
-
-        .metric-circle {
-
-
-            width: 80px;
-
-
-            height: 80px;
-
-
-            border-radius: 50%;
-
-
-            display: flex;
-
-
-            flex-direction: column;
-
-
-            justify-content: center;
-
-
-            align-items: center;
-
-
-            position: relative;
-
-
-        }
-
-
-
-
-
-        .metric-circle::before {
-
-
-            content: '';
-
-
-            position: absolute;
-
-
-            top: -4px;
-
-
-            left: -4px;
-
-
-            right: -4px;
-
-
-            bottom: -4px;
-
-
-            border-radius: 50%;
-
-
-            border: 2px dashed #E5E7EB;
-
-
-            z-index: 0;
-
-
-        }
-
-
-
-
-
-        .priority-badge {
-
-
-            font-size: 10px;
-
-
-            padding: 2px 6px;
-
-
-            border-radius: 4px;
-
-
-            font-weight: 700;
-
-
-        }
-
-
-
-
-
-        .p-high {
-
-
-            background-color: #FEE2E2;
-
-
-            color: #991B1B;
-
-
-        }
-
-
-
-
-
-        .p-med {
-
-
-            background-color: #FEF3C7;
-
-
-            color: #92400E;
-
-
-        }
-
-
-
-
-
-        .p-low {
-
-
-            background-color: #DBEAFE;
-
-
-            color: #1E40AF;
-
-
-        }
-    </style>
-
-
-</head>
-
-
-
-
-
-<body>
-
-
-    <div class="w-full h-screen bg-white flex flex-col relative overflow-hidden">
-
-
-        <!-- Header Line -->
-
-
-        <div class="h-2 w-full bg-aws-orange flex-shrink-0"></div>
-
-
-        <!-- Header -->
-
-
-        <div class="bg-aws-dark text-white px-12 py-4 flex justify-between items-end shadow-md z-10 flex-shrink-0">
-
-
-            <div>
-
-
-                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Jours 1-2 Démo : BLACK
-                    FRIDAY</h2>
-
-
-                <h1 class="text-2xl font-bold">Post-Mortem - Jour 2 (Analyse &amp; Actions)</h1>
-
-
-            </div>
-
-
-            <div class="flex items-center gap-3">
-
-
-                <div class="bg-gray-700 px-4 py-2 rounded-lg flex items-center border border-gray-600">
-
-
-                    <i class="fas fa-clipboard-check text-2xl mr-3 text-green-400"></i>
-
-
-                    <div>
-
-
-                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Statut Projet</p>
-
-
-                        <p class="text-sm font-bold text-white">VALID - GO PROD</p>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-        <!-- Main Content: min-h-0 so it shrinks and footer stays visible -->
-
-
-        <div class="flex-1 min-h-0 p-4 bg-gray-50 flex flex-col gap-4 overflow-hidden">
-
-
-            <!-- Top Row: Analysis (Wins, Gaps, Lessons) -->
-
-
-            <div class="flex gap-4 flex-1 min-h-0">
-
-
-                <!-- Wins -->
-
-
-                <div class="flex-1 bg-white rounded-xl card-shadow p-5 win-card analysis-card flex flex-col">
-
-
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 flex items-center">
-
-
-                        <div class="w-8 h-8 rounded bg-green-100 text-green-600 flex items-center justify-center mr-3">
-
-
-                            <i class="fas fa-thumbs-up"></i>
-
-
-                        </div>
-
-
-                        Wins (Ce qui a marché)
-
-
-                    </h3>
-
-
-                    <ul class="flex-1 space-y-3 overflow-y-auto pr-2">
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Plateforme déployée avec services gérés</strong> sans crash complet de la
-                                plateforme.
-
-
-                            </p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Auto-scaling (HPA/CA)</strong> prêt pour la monte en charge (HPA/CA).</p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>War Room efficace</strong> : Communication fluide et décisions prises en &lt;
-
-
-                                2min.</p>
-
-
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-
-
-                <!-- Gaps -->
-
-
-                <div class="flex-1 bg-white rounded-xl card-shadow p-5 gap-card analysis-card flex flex-col">
-
-
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 flex items-center">
-
-
-                        <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center mr-3">
-
-
-                            <i class="fas fa-thumbs-down"></i>
-
-
-                        </div>
-
-
-                        Gaps (Points d'échec)
-
-
-                    </h3>
-
-
-                    <ul class="flex-1 space-y-3 overflow-y-auto pr-2">
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>IAM manquants</strong> : permissions ALB/CSI insuffisantes au d?part.</p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Alert Fatigue</strong> : Trop de "faux positifs" sur les alertes CPU (seuil 60%
-
-
-                                trop bas).</p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Temps de chauffe</strong> : Le "Cold Start" des nouveaux nuds a caus de la
-
-
-                                latence temporaire.</p>
-
-
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-
-
-                <!-- Lessons -->
-
-
-                <div class="flex-1 bg-white rounded-xl card-shadow p-5 learn-card analysis-card flex flex-col">
-
-
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 flex items-center">
-
-
-                        <div class="w-8 h-8 rounded bg-blue-100 text-blue-600 flex items-center justify-center mr-3">
-
-
-                            <i class="fas fa-lightbulb"></i>
-
-
-                        </div>
-
-
-                        Lessons Learned
-
-
-                    </h3>
-
-
-                    <ul class="flex-1 space-y-3 overflow-y-auto pr-2">
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-info-circle text-blue-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Fail Fast</strong> : Mieux vaut une erreur 503 rapide qu'une requête qui pend
-
-
-                                pendant 30s.</p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-info-circle text-blue-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Over-provisioning</strong> : Garder un buffer de capacit de 20% est vital pour
-
-
-                                les pics soudains.</p>
-
-
-                        </li>
-
-
-                        <li class="flex items-start text-sm text-gray-600">
-
-
-                            <i class="fas fa-info-circle text-blue-500 mt-1 mr-2"></i>
-
-
-                            <p><strong>Documentation</strong> : Les Runbooks "Copier/Coller" ont sauvé 5 min précieuses
-
-
-                                par incident.</p>
-
-
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-
-
-            </div>
-
-
-            <!-- Bottom Row: Actions & Metrics -->
-
-
-            <div class="flex gap-6 flex-1">
-
-
-                <!-- Corrective Actions Table (60%) -->
-
-
-                <div class="flex-[1.5] bg-white rounded-xl card-shadow p-6 flex flex-col">
-
-
-                    <h3 class="font-bold text-aws-dark text-lg mb-4 flex items-center">
-
-
-                        <i class="fas fa-clipboard-list mr-2 text-aws-orange"></i> Plan d'Actions Correctives
-
-
-                    </h3>
-
-
-                    <div class="overflow-hidden rounded-lg border border-gray-200 flex-1">
-
-
-                        <table class="w-full text-left border-collapse">
-
-
-                            <thead
-                                class="bg-gray-50 text-xs text-gray-500 uppercase font-bold border-b border-gray-200">
-
-
-                                <tr>
-
-
-                                    <th class="p-3">Action</th>
-
-
-                                    <th class="p-3 w-32">Owner</th>
-
-
-                                    <th class="p-3 w-24 text-center">Priorité</th>
-
-
-                                    <th class="p-3 w-32 text-right">chance</th>
-
-
-                                </tr>
-
-
-                            </thead>
-
-
-                            <tbody class="text-sm">
-
-
-                                <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-
-                                    <td class="p-3 font-medium text-gray-800">
-
-
-                                        <p>IRSA + policies minimales pour controllers</p>
-
-
-                                        <p class="text-xs text-gray-500 font-normal">Pour éliminer le SPOF mémoire</p>
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-gray-600 flex items-center">
-
-
-                                        <div
-                                            class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] mr-2">
-
-
-                                            OL</div>Ops Lead
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-center"><span class="priority-badge p-high">P0 - CRIT</span>
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-right text-gray-600 font-mono text-xs">J+2</td>
-
-
-                                </tr>
-
-
-                                <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-
-                                    <td class="p-3 font-medium text-gray-800">
-
-
-                                        <p>Validation compatibilit DocumentDB</p>
-
-
-                                        <p class="text-xs text-gray-500 font-normal">Isolation des microservices
-
-
-                                            défaillants</p>
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-gray-600 flex items-center">
-
-
-                                        <div
-                                            class="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-[10px] mr-2">
-
-
-                                            AL</div>Archi Lead
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-center"><span class="priority-badge p-high">P1 - HIGH</span>
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-right text-gray-600 font-mono text-xs">J+5</td>
-
-
-                                </tr>
-
-
-                                <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-
-                                    <td class="p-3 font-medium text-gray-800">
-
-
-                                        <p>Standardiser secrets (.env) et Helm values</p>
-
-
-                                        <p class="text-xs text-gray-500 font-normal">Réduction du bruit (Alert Fatigue)
-
-
-                                        </p>
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-gray-600 flex items-center">
-
-
-                                        <div
-                                            class="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-[10px] mr-2">
-
-
-                                            ML</div>Monit. Lead
-
-
-                                    </td>
-
-
-                                    <td class="p-3 text-center"><span class="priority-badge p-med">P2 - MED</span></td>
-
-
-                                    <td class="p-3 text-right text-gray-600 font-mono text-xs">J+7</td>
-
-
-                                </tr>
-
-
-                            </tbody>
-
-
-                        </table>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- Resilience Indicators (40%) -->
-
-
-                <div
-                    class="flex-[1] bg-aws-darker rounded-xl card-shadow p-6 flex flex-col text-white relative overflow-hidden">
-
-
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-
-
-                        <i class="fas fa-shield-virus text-9xl text-white"></i>
-
-
-                    </div>
-
-
-                    <h3 class="font-bold text-aws-orange text-lg mb-6 flex items-center relative z-10">
-
-
-                        <i class="fas fa-heartbeat mr-2"></i> Indicateurs de Rsilience
-
-
-                    </h3>
-
-
-                    <div class="grid grid-cols-2 gap-6 relative z-10 flex-1">
-
-
-                        <!-- RTO -->
-
-
-                        <div
-                            class="bg-gray-800 bg-opacity-50 rounded-lg p-3 flex flex-col items-center justify-center border border-gray-700">
-
-
-                            <span class="text-xs text-gray-400 font-bold uppercase mb-2">RTO (Recovery Time)</span>
-
-
-                            <div class="text-2xl font-bold text-white mb-1">Cible < 15m</div>
-
-
-                                    <span
-                                        class="text-[10px] text-green-400 bg-green-900 bg-opacity-30 px-2 py-0.5 rounded">Target
-
-
-                                        &lt; 15m</span>
-
-
-                            </div>
-
-
-                            <!-- RPO -->
-
-
-                            <div
-                                class="bg-gray-800 bg-opacity-50 rounded-lg p-3 flex flex-col items-center justify-center border border-gray-700">
-
-
-                                <span class="text-xs text-gray-400 font-bold uppercase mb-2">RPO (Data Loss)</span>
-
-
-                                <div class="text-2xl font-bold text-white mb-1">Cible < 1m</div>
-
-
-                                        <span
-                                            class="text-[10px] text-green-400 bg-green-900 bg-opacity-30 px-2 py-0.5 rounded">Target
-
-
-                                            &lt; 1m</span>
-
-
-                                </div>
-
-
-                                <!-- Availability -->
-
-
-                                <div
-                                    class="bg-gray-800 bg-opacity-50 rounded-lg p-3 flex flex-col items-center justify-center border border-gray-700 col-span-2">
-
-
-                                    <div class="flex justify-between w-full mb-2 px-2">
-
-
-                                        <span class="text-xs text-gray-400 font-bold uppercase">Disponibilité
-                                            (SLA)</span>
-
-
-                                        <span class="text-xs text-green-400 font-bold">Cible 99.9%</span>
-
-
-                                    </div>
-
-
-                                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-2">
-
-
-                                        <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2.5 rounded-full"
-                                            style="width: Cible 99.9%"></div>
-
-
-                                    </div>
-
-
-                                    <p class="text-[10px] text-gray-500">Seulement 24s d'indisponibilité totale sur 8h
-                                    </p>
-
-
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- Footer: flex-shrink-0 keeps it visible at bottom -->
-
-
-                <div
-                    class="h-10 flex-shrink-0 bg-white border-t border-gray-200 flex justify-between items-center text-xs text-gray-400 font-medium z-10">
-
-
-                    <p class="pl-4">HETIC - Projet Black Friday Survival</p>
-
-
-                    <p class="pr-4">Page 10</p>
-
-
-                </div>
-
-
-            </div>
-
-
-            <script>
-
-
-                (function () {
-
-
-                    document.addEventListener('keydown', function (e) {
-
-
-                        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-
-
-                            e.preventDefault();
-
-
-                            if (window.parent !== window) {
-
-
-                                window.parent.postMessage({
-
-
-                                    type: 'slide-nav',
-
-
-                                    key: e.key
-
-
-                                }, '*');
-
-
-                            }
-
-
-                        }
-
-
-                    });
-
-
-                })();
-
-
-            </script>
-
-
-</body>
-
-
-
-
-
-</html>
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .bg-aws-dark {
+            background-color: #232F3E;
+        }
+
+        .bg-aws-darker {
+            background-color: #131A22;
+        }
+
+        .bg-aws-light {
+            background-color: #F2F3F3;
+        }
+
+        .text-aws-dark {
+            color: #232F3E;
+        }
+
+        .text-aws-orange {
+            color: #FF9900;
+        }
+
+        .bg-aws-orange {
+            background-color: #FF9900;
+        }
+
+        .border-aws-orange {
+            border-color: #FF9900;
+        }
+
+        /* IDE/Terminal Styles */
+        .ide-window {
+            background-color: #1E1E1E;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .ide-header {
+            background-color: #252526;
+            padding: 8px 12px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .ide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .ide-sidebar {
+            background-color: #252526;
+            color: #CCCCCC;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .file-row {
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+        }
+
+        .file-row:hover {
+            background-color: #2A2D2E;
+        }
+
+        .file-row.active {
+            background-color: #37373D;
+            border-left-color: #FF9900;
+        }
+
+        .indent-1 {
+            padding-left: 24px;
+        }
+
+        .indent-2 {
+            padding-left: 40px;
+        }
+
+        .indent-3 {
+            padding-left: 56px;
+        }
+
+        /* Card Styles */
+        .resource-card {
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .resource-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-git {
+            border-left-color: #232F3E;
+        }
+
+        .card-doc {
+            border-left-color: #FF9900;
+        }
+
+        .card-obs {
+            border-left-color: #10B981;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w-full h-full min-h-screen bg-white flex flex-col relative overflow-hidden">
+        <!-- Header Line -->
+        <div class="h-2 w-full bg-aws-orange"></div>
+        <!-- Header -->
+        <div class="bg-aws-dark text-white px-12 py-6 flex justify-between items-end shadow-md z-10">
+            <div>
+                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Livrables &amp; Ressources
+                </h2>
+                <h1 class="text-3xl font-bold">Repository &amp; Documentation</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="bg-gray-700 px-4 py-2 rounded-lg flex items-center border border-gray-600">
+                    <i class="fab fa-github text-2xl mr-3 text-white"></i>
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Access Repository</p>
+                        <p class="text-sm font-mono text-aws-orange">github.com/hetic-mt5/bf-survival</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 p-8 bg-gray-50 flex gap-8 overflow-hidden relative">
+            <!-- Left Column: Project Structure (IDE View) -->
+            <div class="flex-[1.2] flex flex-col h-full z-10">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-aws-dark flex items-center">
+                        <i class="fas fa-folder-tree mr-2 text-aws-orange"></i> Structure du Projet
+                    </h3>
+                    <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">v1.0.0-release</span>
+                </div>
+                <div class="ide-window flex-1 flex flex-col overflow-hidden">
+                    <!-- IDE Header -->
+                    <div class="ide-header">
+                        <div class="ide-dot bg-red-500"></div>
+                        <div class="ide-dot bg-yellow-500"></div>
+                        <div class="ide-dot bg-green-500"></div>
+                        <div class="ml-4 text-gray-400 text-xs font-mono">black-friday-project  Visual Studio Code
+                        </div>
+                    </div>
+                    <!-- File Tree -->
+                    <div class="ide-sidebar flex-1 overflow-y-auto py-2">
+                        <div class="file-row text-blue-400 font-bold"><i
+                                class="fas fa-chevron-down mr-2 w-4 text-gray-500 text-xs"></i><i
+                                class="fas fa-folder mr-2"></i>black-friday-survival</div>
+                        <!-- .github -->
+                        <div class="file-row indent-1"><i
+                                class="fas fa-chevron-right mr-2 w-4 text-gray-500 text-xs"></i><i
+                                class="fas fa-folder mr-2 text-gray-500"></i>.github/workflows</div>
+                        <!-- docs -->
+                        <div class="file-row indent-1"><i
+                                class="fas fa-chevron-down mr-2 w-4 text-gray-500 text-xs"></i><i
+                                class="fas fa-folder-open mr-2 text-green-500"></i>docs</div>
+                        <div class="file-row indent-2 active"><i
+                                class="fas fa-file-invoice mr-2 text-gray-400"></i>architecture.md</div>
+                        <div class="file-row indent-2"><i
+                                class="fas fa-file-medical mr-2 text-gray-400"></i>ARCHITECTURE_LLM.md</div>
+                        <div class="file-row indent-2"><i
+                                class="fas fa-file-alt mr-2 text-gray-400"></i>architecture_presentation_notes.md</div>
+                        <!-- kubernetes -->
+                        <div class="file-row indent-1"><i
+                                class="fas fa-chevron-down mr-2 w-4 text-gray-500 text-xs"></i><i
+                                class="fas fa-folder mr-2 text-blue-400"></i>k8s</div>
+                        <div class="file-row indent-2"><i
+                                class="fas fa-dharmachakra mr-2 text-blue-300"></i>grandnode2/</div>
+                        <div class="file-row indent-2"><i
+                                class="fas fa-file-code mr-2 text-yellow-500"></i>values.yaml</div>
+                        <!-- terraform -->
+                        <div class="file-row indent-1"><i
+                                class="fas fa-chevron-down mr-2 w-4 text-gray-500 text-xs"></i><i
+                                class="fas fa-folder mr-2 text-purple-400"></i>infra</div>
+                        <div class="file-row indent-2"><i class="fas fa-folder mr-2 text-gray-500"></i>modules/</div>
+                        <div class="file-row indent-3"><i class="fas fa-folder mr-2 text-gray-500"></i>vpc/</div>
+                        <div class="file-row indent-3"><i class="fas fa-folder mr-2 text-gray-500"></i>eks/
+                        </div>
+                        <div class="file-row indent-2"><i class="fas fa-file-code mr-2 text-purple-400"></i>main.tf
+                        </div>
+                        <div class="file-row indent-2"><i class="fas fa-file-code mr-2 text-purple-400"></i>variables.tf
+                        </div>
+                        <!-- root files -->
+                        <div class="file-row indent-1"><i class="fas fa-file-code mr-2 text-red-400"></i>scripts/deploy.sh</div>
+                        <div class="file-row indent-1"><i class="fab fa-markdown mr-2 text-blue-300"></i>README.md</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Deliverables Cards -->
+            <div class="flex-[1.8] flex flex-col gap-6 z-10">
+                <!-- Section: Documentation -->
+                <div>
+                    <h3 class="font-bold text-aws-dark mb-3 flex items-center border-b border-gray-200 pb-2">
+                        <i class="fas fa-book mr-2 text-aws-orange"></i> Documentation Technique
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- ADR Card -->
+                        <div
+                            class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 resource-card card-doc group cursor-pointer">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="bg-orange-100 text-orange-600 rounded p-2"><i class="fas fa-sitemap"></i>
+                                </div>
+                                <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Markdown</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Architecture</h4>
+                            <p class="text-xs text-gray-500 mt-1 mb-3">Architecture relle issue du repo (EKS, VPC, DocDB, Redis).</p>
+                            <div class="flex items-center text-xs font-bold text-aws-orange group-hover:underline">
+                                Voir doc <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+                            </div>
+                        </div>
+                        <!-- Runbooks Card -->
+                        <div
+                            class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 resource-card card-doc group cursor-pointer">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="bg-orange-100 text-orange-600 rounded p-2"><i class="fas fa-tools"></i>
+                                </div>
+                                <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Markdown</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Notes de prsentation</h4>
+                            <p class="text-xs text-gray-500 mt-1 mb-3">Synthse pour l'oral + limites connues.</p>
+                            <div class="flex items-center text-xs font-bold text-aws-orange group-hover:underline">
+                                Ouvrir notes <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Section: Monitoring & Reporting -->
+                <div>
+                    <h3 class="font-bold text-aws-dark mb-3 flex items-center border-b border-gray-200 pb-2">
+                        <i class="fas fa-chart-line mr-2 text-aws-orange"></i> Monitoring &amp; Analyse
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Post Mortem Card -->
+                        <div
+                            class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 resource-card card-obs group cursor-pointer">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="bg-green-100 text-green-600 rounded p-2"><i
+                                        class="fas fa-file-medical-alt"></i></div>
+                                <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Markdown</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Suivi projet</h4>
+                            <p class="text-xs text-gray-500 mt-1 mb-3">Planning et suivi des tches (scope infra/deploy).</p>
+                            <div class="flex items-center text-xs font-bold text-aws-dark group-hover:underline">
+                                Ouvrir suivi <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+                            </div>
+                        </div>
+                        <!-- Dashboard Access Card -->
+                        <div
+                            class="bg-aws-darker p-4 rounded-lg shadow-md border border-gray-700 resource-card card-git group cursor-pointer relative overflow-hidden">
+                            <!-- Background glow -->
+                            <div
+                                class="absolute -right-4 -top-4 w-20 h-20 bg-aws-orange opacity-20 rounded-full blur-xl">
+                            </div>
+                            <div class="flex justify-between items-start mb-2 relative z-10">
+                                <div class="bg-gray-700 text-aws-orange rounded p-2"><i
+                                        class="fas fa-tachometer-alt"></i></div>
+                                <span class="text-xs bg-gray-700 text-white px-2 py-0.5 rounded flex items-center">
+                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></div>Live
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-white relative z-10">Logs Kubernetes</h4>
+                            <p class="text-xs text-gray-400 mt-1 mb-3 relative z-10">Accs aux logs applicatifs via kubectl (et CloudWatch logs du cluster).</p>
+                            <div
+                                class="flex items-center text-xs font-bold text-aws-orange group-hover:underline relative z-10">
+                                Voir logs <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer Note -->
+                <div class="mt-auto bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-center">
+                    <i class="fas fa-info-circle text-blue-500 mr-3 text-lg"></i>
+                    <div>
+                        <p class="text-xs text-blue-800 font-bold">Note de version</p>
+                        <p class="text-[10px] text-blue-600">Le repository contient l'historique complet des commits
+                            (Conventional Commits) dmontrant la progression sur les 3 semaines.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div
+            class="h-10 bg-white border-t border-gray-200 flex justify-between items-center px-12 text-xs text-gray-400 font-medium z-10">
+            <p>HETIC - Projet Black Friday Survival</p>
+            <p>Page 8</p>
+        </div>
+    </div>
+    <script>
+        (function () {
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    if (window.parent !== window) {
+                        window.parent.postMessage({
+                            type: 'slide-nav',
+                            key: e.key
+                        }, '*');
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>
+
