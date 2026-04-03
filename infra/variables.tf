@@ -18,7 +18,7 @@ variable "env" {
 variable "aws_region" {
   description = "AWS region where infrastructure is deployed."
   type        = string
-  default     = "eu-west-3"
+  default     = "eu-west-1"
 }
 
 variable "vpc_cidr" {
@@ -30,7 +30,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability Zones used to spread subnets."
   type        = list(string)
-  default     = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+  default     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 }
 
 variable "kubernetes_version" {
@@ -42,25 +42,25 @@ variable "kubernetes_version" {
 variable "node_instance_types" {
   description = "EC2 instance types for EKS managed node group."
   type        = list(string)
-  default     = ["m5.xlarge"]
+  default     = ["t3.large"]
 }
 
 variable "node_desired_size" {
   description = "Desired number of EKS worker nodes."
   type        = number
-  default     = 4
+  default     = 3
 }
 
 variable "node_min_size" {
   description = "Minimum number of EKS worker nodes."
   type        = number
-  default     = 4
+  default     = 3
 }
 
 variable "node_max_size" {
   description = "Maximum number of EKS worker nodes."
   type        = number
-  default     = 12
+  default     = 15
 }
 
 variable "cluster_log_retention_in_days" {
@@ -75,12 +75,28 @@ variable "tags" {
   default     = {}
 }
 
-# --- Monitoring Variables ---
+
+
+variable "alb_arn" {
+  description = <<-EOT
+    ARN of the internet-facing ALB created by the AWS Load Balancer Controller.
+    Leave empty on the first apply (cluster not yet running).
+    Once the ALB exists, pass it with: -var='alb_arn=arn:aws:elasticloadbalancing:...'
+  EOT
+  type        = string
+  default     = ""
+}
 
 variable "sns_topic_arn" {
   description = "ARN of the SNS topic for alarm notifications"
   type        = string
   default     = ""
+}
+
+variable "waf_rate_limit_per_5min" {
+  description = "Max requests per IP per 5-minute window before WAF blocks. Default: 2000."
+  type        = number
+  default     = 2000
 }
 
 variable "alb_arn_suffix" {
@@ -111,4 +127,17 @@ variable "monthly_budget_limit" {
   description = "Monthly budget limit for billing alarm"
   type        = number
   default     = 500
+}
+
+variable "enable_secrets_manager" {
+  description = "Create an AWS Secrets Manager secret for application secrets."
+  type        = bool
+  default     = false
+}
+
+variable "app_secrets_json" {
+  description = "Optional JSON payload to store in AWS Secrets Manager for the application (for example DB credentials)."
+  type        = string
+  default     = ""
+  sensitive   = true
 }

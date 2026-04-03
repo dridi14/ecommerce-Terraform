@@ -27,3 +27,57 @@ output "eks_cluster_oidc_issuer_url" {
   description = "EKS OIDC issuer URL."
   value       = module.eks.cluster_oidc_issuer_url
 }
+
+# ---------------------------------------------------------------------------
+# Security outputs
+# ---------------------------------------------------------------------------
+
+output "alb_sg_id" {
+  description = "Security Group ID for the internet-facing ALB."
+  value       = module.security.alb_sg_id
+}
+
+output "eks_nodes_sg_id" {
+  description = "Additional Security Group ID for EKS worker nodes."
+  value       = module.security.eks_nodes_sg_id
+}
+
+output "docdb_sg_id" {
+  description = "Security Group ID for DocumentDB / MongoDB."
+  value       = module.security.docdb_sg_id
+}
+
+output "waf_web_acl_arn" {
+  description = "WAFv2 WebACL ARN – use to associate with additional ALBs or CloudFront."
+  value       = module.security.waf_web_acl_arn
+}
+
+output "oidc_provider_arn" {
+  description = "EKS OIDC Identity Provider ARN."
+  value       = module.security.oidc_provider_arn
+}
+
+output "alb_controller_role_arn" {
+  description = "IAM Role ARN – annotate K8s SA aws-load-balancer-controller with this."
+  value       = module.security.alb_controller_role_arn
+}
+
+output "cluster_autoscaler_role_arn" {
+  description = "IAM Role ARN – annotate K8s SA cluster-autoscaler with this."
+  value       = module.security.cluster_autoscaler_role_arn
+}
+
+output "external_dns_role_arn" {
+  description = "IAM Role ARN – annotate K8s SA external-dns with this."
+  value       = module.security.external_dns_role_arn
+}
+
+output "app_secret_arn" {
+  description = "AWS Secrets Manager secret ARN for application secrets."
+  value       = module.security.app_secret_arn
+}
+
+output "app_secrets_read_policy_arn" {
+  description = "IAM policy ARN for read-only access to the app secret."
+  value       = module.security.app_secrets_read_policy_arn
+}
