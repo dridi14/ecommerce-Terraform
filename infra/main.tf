@@ -10,6 +10,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.6"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 }
 
@@ -50,4 +54,19 @@ module "eks" {
   node_max_size                 = var.node_max_size
   cluster_log_retention_in_days = var.cluster_log_retention_in_days
   tags                          = local.common_tags
+}
+
+module "security" {
+  source = "./modules/security"
+
+  name_prefix             = "${var.project_name}-${var.env}"
+  vpc_id                  = module.vpc.vpc_id
+  cluster_oidc_issuer_url = module.eks.cluster_oidc_issuer_url
+  alb_arn                 = var.alb_arn
+  waf_rate_limit_per_5min = var.waf_rate_limit_per_5min
+  enable_secrets_manager  = var.enable_secrets_manager
+  app_secrets_json        = var.app_secrets_json
+  tags                    = local.common_tags
+
+  depends_on = [module.eks]
 }

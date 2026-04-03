@@ -1,909 +1,214 @@
 <!DOCTYPE html>
 
-
-
-
-
 <html lang="fr">
 
-
-
-
-
 <head>
-
-
     <meta charset="utf-8" />
-
-
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-
-
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-
-
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&amp;display=swap"
         rel="stylesheet" />
-
-
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
-
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
     <style>
         body {
-
-
             font-family: 'Roboto', sans-serif;
-
-
             margin: 0;
-
-
             padding: 0;
-
-
             overflow: hidden;
-
-
         }
-
-
-
-
 
         .bg-aws-dark {
-
-
             background-color: #232F3E;
-
-
         }
-
-
-
-
 
         .bg-aws-darker {
-
-
             background-color: #131A22;
-
-
         }
-
-
-
-
 
         .bg-aws-light {
-
-
             background-color: #F2F3F3;
-
-
         }
-
-
-
-
 
         .text-aws-dark {
-
-
             color: #232F3E;
-
-
         }
-
-
-
-
 
         .text-aws-orange {
-
-
             color: #FF9900;
-
-
         }
-
-
-
-
 
         .bg-aws-orange {
-
-
             background-color: #FF9900;
-
-
         }
-
-
-
-
 
         .border-aws-orange {
-
-
             border-color: #FF9900;
-
-
         }
-
-
-
-
 
         /* Timeline: line spans full content height */
-
-
         .timeline-line {
-
-
             position: absolute;
-
-
             left: 20px;
-
-
             top: 8px;
-
-
             bottom: 8px;
-
-
             width: 2px;
-
-
             background-color: #E5E7EB;
-
-
             z-index: 0;
-
-
         }
-
-
-
-
 
         .incident-card {
-
-
             position: relative;
-
-
             z-index: 10;
-
-
         }
-
-
-
-
 
         .sev-badge {
-
-
             font-size: 10px;
-
-
             font-weight: 800;
-
-
             padding: 2px 6px;
-
-
             border-radius: 4px;
-
-
             text-transform: uppercase;
-
-
         }
-
-
-
-
 
         .sev-1 {
-
-
             background-color: #FEE2E2;
-
-
             color: #991B1B;
-
-
             border: 1px solid #FECACA;
-
-
         }
-
-
-
-
 
         .sev-2 {
-
-
             background-color: #FFEDD5;
-
-
             color: #9A3412;
-
-
             border: 1px solid #FED7AA;
-
-
         }
-
-
-
-
 
         .sev-3 {
-
-
             background-color: #FEF3C7;
-
-
             color: #92400E;
-
-
             border: 1px solid #FDE68A;
-
-
         }
-
-
-
-
 
         .kpi-stat-card {
-
-
             background: white;
-
-
             border-radius: 8px;
-
-
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-
-
             border-bottom: 3px solid transparent;
-
-
         }
+
     </style>
-
-
 </head>
 
-
-
-
-
 <body>
-
-
     <div class="w-full h-screen bg-white flex flex-col relative overflow-hidden">
-
-
         <!-- Header Line -->
-
-
         <div class="h-2 w-full bg-aws-orange flex-shrink-0"></div>
 
-
-        <!-- Header -->
-
-
-        <div class="bg-aws-dark text-white px-12 py-4 flex justify-between items-end shadow-md z-10 flex-shrink-0">
-
-
+        <div class="bg-aws-dark text-white px-12 py-5 flex justify-between items-end shadow-md z-10 flex-shrink-0">
             <div>
-
-
-                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Jours 1-2 Démo : BLACK
-                    FRIDAY</h2>
-
-
-                <h1 class="text-2xl font-bold">Incidents Traits &amp; KPIs Résilience</h1>
-
-
+                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Sécurité Cloud</h2>
+                <h1 class="text-3xl font-bold">Sécurisation de l’infrastructure AWS</h1>
             </div>
-
-
             <div class="flex items-center gap-3">
-
-
                 <div class="bg-gray-700 px-4 py-2 rounded-lg flex items-center border border-gray-600">
-
-
-                    <i class="fas fa-fire-extinguisher text-2xl mr-3 text-red-400"></i>
-
-
+                    <i class="fas fa-shield-alt text-2xl mr-3 text-green-400"></i>
                     <div>
-
-
-                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">État Final</p>
-
-
-                        <p class="text-sm font-bold text-white">Tous Incidents Résolus</p>
-
-
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Focus</p>
+                        <p class="text-sm font-bold text-white">Protection de l'infrastructure</p>
                     </div>
-
-
                 </div>
-
-
             </div>
-
-
         </div>
 
+        <div class="flex-1 min-h-0 p-6 bg-gray-50 grid grid-cols-2 gap-5">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h3 class="font-bold text-aws-dark text-lg mb-4 flex items-center">
+                    <i class="fas fa-check-circle mr-2 text-aws-orange"></i> Ce qui a été mis en place
+                </h3>
 
-        <!-- Main Content: min-h-0 so footer stays visible -->
+                <div class="space-y-4 text-sm text-gray-700">
+                    <div class="flex gap-3">
+                        <i class="fas fa-user-shield text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-gray-900">IAM / IRSA</p>
+                            <p>Rôles AWS dédiés pour les services Kubernetes.</p>
+                        </div>
+                    </div>
 
+                    <div class="flex gap-3">
+                        <i class="fas fa-network-wired text-orange-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-gray-900">Security Groups</p>
+                            <p>Séparation des accès entre ALB, EKS et base de données.</p>
+                        </div>
+                    </div>
 
-        <div class="flex-1 min-h-0 p-4 bg-gray-50 flex gap-4 overflow-hidden relative">
+                    <div class="flex gap-3">
+                        <i class="fas fa-shield-alt text-red-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-gray-900">WAF AWS</p>
+                            <p>Filtrage des requêtes malveillantes avant l’application.</p>
+                        </div>
+                    </div>
 
-
-            <!-- Left Column: Incident Timeline (uniform flex-1) -->
-
-
-            <div class="flex-1 min-h-0 min-w-0 flex flex-col relative z-10">
-
-
-                <div class="flex items-center justify-between mb-2 flex-shrink-0">
-
-
-                    <h3 class="font-bold text-aws-dark flex items-center text-sm">
-
-
-                        <i class="fas fa-history mr-2 text-aws-orange"></i> Journal des Incidents (Chronologie)
-
-
-                    </h3>
-
-
-                    <span class="text-[10px] bg-gray-200 text-gray-600 px-2 py-0.5 rounded font-mono">Filter: ALL</span>
-
-
+                    <div class="flex gap-3">
+                        <i class="fas fa-key text-green-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-gray-900">Secrets Manager</p>
+                            <p>Préparé dans Terraform, mais laissé désactivé pour garder une démo stable.</p>
+                        </div>
+                    </div>
                 </div>
-
-
-                <!-- Timeline: flex column, no scroll, cards share space equally -->
-
-
-                <div
-                    class="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex-1 min-h-0 flex flex-col gap-2 relative overflow-hidden">
-
-
-                    <div class="timeline-line"></div>
-
-
-                    <!-- Incident 1 -->
-
-
-                    <div class="flex gap-2 flex-1 min-h-0 incident-card">
-
-
-                        <div class="flex flex-col items-center flex-shrink-0">
-
-
-                            <div
-                                class="w-8 h-8 bg-red-100 rounded-full border-2 border-white shadow flex items-center justify-center z-10">
-
-
-                                <i class="fas fa-bomb text-red-600 text-xs"></i>
-
-
-                            </div>
-
-
-                            <span class="text-[9px] font-bold text-gray-500 mt-0.5">10:42</span>
-
-
-                        </div>
-
-
-                        <div
-                            class="flex-1 min-w-0 bg-white border border-red-100 rounded-lg shadow-sm p-2 relative overflow-hidden flex flex-col justify-center">
-
-
-                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
-
-
-                            <div class="flex justify-between items-start gap-2">
-
-
-                                <div class="min-w-0 flex-1">
-
-
-                                    <h4 class="font-bold text-gray-800 text-[11px] leading-tight">Ingress/ALB - IAM
-                                        AccessDenied</h4>
-
-
-                                    <p class="text-[9px] text-red-600 mt-0.5">Impact: ingress non créé</p>
-
-
-                                </div>
-
-
-                                <span class="sev-badge sev-1 flex-shrink-0">SEV-1</span>
-
-
-                            </div>
-
-
-                            <div class="grid grid-cols-2 gap-1.5 mt-1.5 bg-gray-50 p-1.5 rounded text-[9px]">
-
-
-                                <div><span class="font-bold text-gray-500">Diagnostic:</span> <span
-                                        class="text-gray-700">Redis saturé (pic).</span></div>
-
-
-                                <div><span class="font-bold text-gray-500">Résolution:</span> <span
-                                        class="text-gray-700">Attacher policy ELB + redeploy.</span></div>
-
-
-                            </div>
-
-
-                            <div class="mt-1 flex justify-end"><span
-                                    class="text-[9px] font-bold text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">MTTR:
-                                    ~15m</span></div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- Incident 2 -->
-
-
-                    <div class="flex gap-2 flex-1 min-h-0 incident-card">
-
-
-                        <div class="flex flex-col items-center flex-shrink-0">
-
-
-                            <div
-                                class="w-8 h-8 bg-orange-100 rounded-full border-2 border-white shadow flex items-center justify-center z-10">
-
-
-                                <i class="fas fa-network-wired text-orange-600 text-xs"></i>
-
-
-                            </div>
-
-
-                            <span class="text-[9px] font-bold text-gray-500 mt-0.5">15:15</span>
-
-
-                        </div>
-
-
-                        <div
-                            class="flex-1 min-w-0 bg-white border border-orange-100 rounded-lg shadow-sm p-2 relative overflow-hidden flex flex-col justify-center">
-
-
-                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-500"></div>
-
-
-                            <div class="flex justify-between items-start gap-2">
-
-
-                                <div class="min-w-0 flex-1">
-
-
-                                    <h4 class="font-bold text-gray-800 text-[11px] leading-tight">EBS CSI - AccessDenied
-                                    </h4>
-
-
-                                    <p class="text-[9px] text-orange-600 mt-0.5">Impact: PVC en attente</p>
-
-
-                                </div>
-
-
-                                <span class="sev-badge sev-2 flex-shrink-0">SEV-2</span>
-
-
-                            </div>
-
-
-                            <div class="grid grid-cols-2 gap-1.5 mt-1.5 bg-gray-50 p-1.5 rounded text-[9px]">
-
-
-                                <div><span class="font-bold text-gray-500">Diagnostic:</span> <span
-                                        class="text-gray-700">EC2 DescribeAvailabilityZones interdit.</span></div>
-
-
-                                <div><span class="font-bold text-gray-500">Rsolution:</span> <span
-                                        class="text-gray-700">Attacher policy EC2 + restart addon.</span></div>
-
-
-                            </div>
-
-
-                            <div class="mt-1 flex justify-end"><span
-                                    class="text-[9px] font-bold text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">MTTR:
-                                    ~110-20m</span></div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- Incident 3 -->
-
-
-                    <div class="flex gap-2 flex-1 min-h-0 incident-card">
-
-
-                        <div class="flex flex-col items-center flex-shrink-0">
-
-
-                            <div
-                                class="w-8 h-8 bg-yellow-100 rounded-full border-2 border-white shadow flex items-center justify-center z-10">
-
-
-                                <i class="fas fa-server text-yellow-600 text-xs"></i>
-
-
-                            </div>
-
-
-                            <span class="text-[9px] font-bold text-gray-500 mt-0.5">16:45</span>
-
-
-                        </div>
-
-
-                        <div
-                            class="flex-1 min-w-0 bg-white border border-yellow-100 rounded-lg shadow-sm p-2 relative overflow-hidden flex flex-col justify-center">
-
-
-                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500"></div>
-
-
-                            <div class="flex justify-between items-start gap-2">
-
-
-                                <div class="min-w-0 flex-1">
-
-
-                                    <h4 class="font-bold text-gray-800 text-[11px] leading-tight">Redis Auth -
-                                        CrashLoopBackOff</h4>
-
-
-                                    <p class="text-[9px] text-yellow-600 mt-0.5">Impact: app ne démarre pas</p>
-
-
-                                </div>
-
-
-                                <span class="sev-badge sev-3 flex-shrink-0">SEV-3</span>
-
-
-                            </div>
-
-
-                            <div class="grid grid-cols-2 gap-1.5 mt-1.5 bg-gray-50 p-1.5 rounded text-[9px]">
-
-
-                                <div><span class="font-bold text-gray-500">Diagnostic:</span> <span
-                                        class="text-gray-700">Redis NOAUTH (mot de passe manquant).</span></div>
-
-
-                                <div><span class="font-bold text-gray-500">Rsolution:</span> <span
-                                        class="text-gray-700">Configurer REDIS_* avec password .</span></div>
-
-
-                            </div>
-
-
-                            <div class="mt-1 flex justify-end"><span
-                                    class="text-[9px] font-bold text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">MTTR:
-                                    ~1< 5m</span>
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
             </div>
 
-
-            <!-- Right Column: KPIs & Measures (uniform flex-1) -->
-
-
-            <div class="flex-1 min-h-0 min-w-0 flex flex-col gap-4 z-10">
-
-
-                <!-- KPI Synthesis -->
-
-
-                <div class="flex-shrink-0">
-
-
-                    <h3 class="font-bold text-aws-dark flex items-center text-sm mb-2">
-
-
-                        <i class="fas fa-chart-pie mr-2 text-aws-orange"></i> Synthèse KPIs Incidents
-
-
+            <div class="flex flex-col gap-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                    <h3 class="font-bold text-aws-dark text-lg mb-4 flex items-center">
+                        <i class="fas fa-shield-virus mr-2 text-aws-orange"></i> Objectifs de la sécurisation
                     </h3>
-
-
-                    <div class="grid grid-cols-2 gap-2">
-
-
-                        <!-- Total Incidents -->
-
-
-                        <div class="kpi-stat-card p-3 border-b-blue-500">
-
-
-                            <p class="text-[9px] font-bold text-gray-500 uppercase">Total Incidents</p>
-
-
-                            <p class="text-2xl font-bold text-aws-dark my-0.5">3</p>
-
-
-                            <p class="text-[9px] text-gray-400">Sur 8h simulation</p>
-
-
-                        </div>
-
-
-                        <!-- Availability -->
-
-
+                    <div class="grid grid-cols-1 gap-3 text-sm text-gray-700">
                         <div class="kpi-stat-card p-3 border-b-green-500">
-
-
-                            <p class="text-[9px] font-bold text-gray-500 uppercase">Disponibilité</p>
-
-
-                            <p class="text-2xl font-bold text-aws-dark my-0.5">N/A</p>
-
-
-                            <p class="text-[9px] text-green-600">Non mesuré(démo)</p>
-
-
+                            <p class="font-semibold text-gray-900">Réduire la surface d’attaque</p>
+                            <p class="text-xs text-gray-500 mt-1">Limiter les accès réseau et les permissions AWS au strict nécessaire.</p>
                         </div>
-
-
-                        <!-- MTTA -->
-
-
-                        <div class="kpi-stat-card p-3 border-b-purple-500">
-
-
-                            <p class="text-[9px] font-bold text-gray-500 uppercase">MTTA (Moyen)</p>
-
-
-                            <p class="text-2xl font-bold text-aws-dark my-0.5">
-                                < 5m</p>
-
-
-                                    <p class="text-[9px] text-gray-400">Détection &lt; 5 min</p>
-
-
+                        <div class="kpi-stat-card p-3 border-b-red-500">
+                            <p class="font-semibold text-gray-900">Protéger l’exposition web</p>
+                            <p class="text-xs text-gray-500 mt-1">Filtrer les requêtes malveillantes en amont grâce au WAF.</p>
                         </div>
-
-
-                        <!-- MTTR -->
-
-
-                        <div class="kpi-stat-card p-3 border-b-orange-500">
-
-
-                            <p class="text-[9px] font-bold text-gray-500 uppercase">MTTR (Moyen)</p>
-
-
-                            <p class="text-2xl font-bold text-aws-dark my-0.5">10-20m</p>
-
-
-                            <p class="text-[9px] text-gray-400">Résolution rapide</p>
-
-
-                        </div>
-
-
                     </div>
-
-
                 </div>
 
-
-                <!-- Sustainable Measures -->
-
-
-                <div
-                    class="flex-1 min-h-0 bg-aws-darker rounded-xl p-4 text-white flex flex-col shadow-sm overflow-hidden">
-
-
-                    <h3
-                        class="font-bold text-aws-orange text-xs mb-2 uppercase tracking-wide border-b border-gray-700 pb-2 flex-shrink-0">
-
-
-                        <i class="fas fa-shield-alt mr-2"></i> Mesures Durables (Post-Incident)
-
-
-                    </h3>
-
-
-                    <div class="space-y-2 overflow-y-auto flex-1 min-h-0 pr-2">
-
-
-                        <div class="flex gap-2">
-
-
-                            <div class="mt-0.5 flex-shrink-0"><i class="fas fa-check-circle text-green-500 text-xs"></i>
-                            </div>
-
-
-                            <div class="min-w-0">
-
-
-                                <h4 class="text-xs font-bold text-white">IAM/IRSA pour controllers</h4>
-
-
-                                <p class="text-[10px] text-gray-400 mt-0.5">Redis Standalone Cluster (viter OOM).</p>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="flex gap-2">
-
-
-                            <div class="mt-0.5 flex-shrink-0"><i class="fas fa-check-circle text-green-500 text-xs"></i>
-                            </div>
-
-
-                            <div class="min-w-0">
-
-
-                                <h4 class="text-xs font-bold text-white">Compatibilité DocumentDB</h4>
-
-
-                                <p class="text-[10px] text-gray-400 mt-0.5">Désactiver collation non supportée.</p>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="flex gap-2">
-
-
-                            <div class="mt-0.5 flex-shrink-0"><i class="fas fa-check-circle text-green-500 text-xs"></i>
-                            </div>
-
-
-                            <div class="min-w-0">
-
-
-                                <h4 class="text-xs font-bold text-white">Secrets &amp; configs</h4>
-
-
-                                <p class="text-[10px] text-gray-400 mt-0.5">Centraliser secrets dans .env et Helm
-                                    values.</p>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
+                <div class="bg-aws-darker rounded-xl p-5 text-white flex-1">
+                    <h3 class="font-bold text-aws-orange text-lg mb-4">Ce que cela apporte au projet</h3>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex gap-2"><i class="fas fa-check text-green-400 mt-1"></i><span>Permissions AWS plus propres et mieux isolées</span></li>
+                        <li class="flex gap-2"><i class="fas fa-check text-green-400 mt-1"></i><span>Cloisonnement réseau entre ALB, EKS et base de données</span></li>
+                        <li class="flex gap-2"><i class="fas fa-check text-green-400 mt-1"></i><span>Protection applicative contre les attaques web courantes</span></li>
+                        <li class="flex gap-2"><i class="fas fa-check text-green-400 mt-1"></i><span>Base prête pour intégrer Secrets Manager et d’autres renforcements</span></li>
+                    </ul>
                 </div>
-
-
             </div>
-
-
         </div>
 
-
-        <!-- Footer: flex-shrink-0 keeps it visible at bottom -->
-
-
-        <div
-            class="h-10 flex-shrink-0 bg-white border-t border-gray-200 flex justify-between items-center text-xs text-gray-400 font-medium z-10">
-
-
+        <div class="h-10 flex-shrink-0 bg-white border-t border-gray-200 flex justify-between items-center text-xs text-gray-400 font-medium z-10">
             <p class="pl-4">HETIC - Projet Black Friday Survival</p>
-
-
             <p class="pr-4">Page 9</p>
-
-
         </div>
-
-
     </div>
-
-
     <script>
-
-
         (function () {
-
-
             document.addEventListener('keydown', function (e) {
-
-
                 if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-
-
                     e.preventDefault();
-
-
                     if (window.parent !== window) {
-
-
                         window.parent.postMessage({
-
-
                             type: 'slide-nav',
-
-
                             key: e.key
-
-
                         }, '*');
-
-
                     }
-
-
                 }
-
-
             });
-
-
         })();
-
-
     </script>
-
-
 </body>
-
-
-
-
 
 </html>

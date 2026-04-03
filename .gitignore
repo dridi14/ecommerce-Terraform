@@ -218,6 +218,13 @@ _pkginfo.txt
 ClientBin/
 ~$*
 *~
+
+# Terraform local artifacts
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+infra/tfplan
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
