@@ -23,8 +23,6 @@
 
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&amp;display=swap"
-
-
         rel="stylesheet" />
 
 
@@ -32,8 +30,6 @@
 
 
     <style>
-
-
         body {
 
 
@@ -185,8 +181,6 @@
 
 
         }
-
-
     </style>
 
 
@@ -217,13 +211,13 @@
             <div>
 
 
-                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Observabilit &amp;
+                <h2 class="text-aws-orange font-bold uppercase tracking-widest text-xs mb-1">Observabilité &amp;
 
 
                     Monitoring</h2>
 
 
-                <h1 class="text-3xl font-bold">Stratgie d'Observabilit &amp; Choix Techniques</h1>
+                <h1 class="text-3xl font-bold">Stratégie d'Observabilité &amp; Choix Techniques</h1>
 
 
             </div>
@@ -233,8 +227,6 @@
 
 
                 <div
-
-
                     class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg flex items-center">
 
 
@@ -292,7 +284,7 @@
                     </div>
 
 
-                                        <!-- Stack Item: CloudWatch -->
+                    <!-- Stack Item: CloudWatch -->
 
 
                     <div class="stack-item p-3 rounded shadow-md relative z-10">
@@ -313,7 +305,7 @@
                         <p class="text-xs text-gray-300 leading-tight">
 
 
-                            Logs EKS / ALB centralis?s pour diagnostic rapide sans stack d'observabilitlourde.
+                            Logs EKS / ALB centralisés pour diagnostic rapide sans stack d'observabilité lourde.
 
 
                         </p>
@@ -326,8 +318,6 @@
 
 
                     <div class="stack-item p-3 rounded shadow-md relative z-10 border-l-blue-400"
-
-
                         style="border-left-color: #60a5fa;">
 
 
@@ -355,7 +345,7 @@
                     </div>
 
 
-                                        <!-- Stack Item: Prometheus -->
+                    <!-- Stack Item: Prometheus -->
                     <div class="stack-item p-3 rounded shadow-md relative z-10 border-l-yellow-500"
                         style="border-left-color: #f59e0b;">
                         <div class="flex justify-between items-center mb-1">
@@ -363,7 +353,7 @@
                             <span class="text-[10px] bg-gray-700 px-2 rounded">Metrics</span>
                         </div>
                         <p class="text-xs text-gray-300 leading-tight">
-                            Collecte des m?triques pods/nodes pour suivi de charge et dashboards.
+                            Collecte des métriques pods/nodes pour suivi de charge et dashboards.
                         </p>
                     </div>
                     <!-- Stack Item: Grafana -->
@@ -377,19 +367,18 @@
                             Dashboards pour la war room et la lecture rapide des KPIs.
                         </p>
                     </div>
-<!-- Stack Item: metrics-server -->
+                    <!-- Stack Item: metrics-server -->
 
 
                     <div class="stack-item p-3 rounded shadow-md relative z-10 border-l-green-500"
-
-
                         style="border-left-color: #10b981;">
 
 
                         <div class="flex justify-between items-center mb-1">
 
 
-                            <span class="font-bold text-green-400"><i class="fas fa-chart-line mr-2"></i>metrics-server</span>
+                            <span class="font-bold text-green-400"><i
+                                    class="fas fa-chart-line mr-2"></i>metrics-server</span>
 
 
                             <span class="text-[10px] bg-gray-700 px-2 rounded">HPA</span>
@@ -410,145 +399,429 @@
                     </div>
 
 
-            <!-- Column 2: Metrics Strategy (The WHAT) -->
+                    <!-- Column 2: Metrics Strategy (The WHAT) -->
 
 
-            <div class="flex-[1.2] flex flex-col gap-4">
+                    <div class="flex-[1.2] flex flex-col gap-4">
 
 
-                <div class="flex items-center justify-between border-b-2 border-blue-500 pb-2 mb-2">
+                        <div class="flex items-center justify-between border-b-2 border-blue-500 pb-2 mb-2">
 
 
-                    <h3 class="font-bold text-aws-dark text-lg"><i class="fas fa-chart-line mr-2"></i>Mtriques Cls
+                            <h3 class="font-bold text-aws-dark text-lg"><i class="fas fa-chart-line mr-2"></i>Métriques
+                                Clés
 
 
-                        (Golden Signals)</h3>
+                                (Golden Signals)</h3>
 
 
-                    <span class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-bold">Google SRE</span>
+                            <span class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-bold">Google
+                                SRE</span>
+
+
+                        </div>
+
+
+                        <div class="grid grid-cols-1 gap-4 flex-1">
+
+
+                            <!-- Signal 1: Latency -->
+
+
+                            <div class="bg-white border-l-4 border-yellow-500 rounded-lg p-4 shadow-sm">
+
+
+                                <h4 class="font-bold text-gray-800 flex items-center mb-2">
+
+
+                                    <i class="fas fa-clock text-yellow-500 mr-2"></i> Latence (Latency)
+
+
+                                </h4>
+
+
+                                <div class="bg-gray-50 rounded p-2 mb-2">
+
+
+                                    <p class="text-xs font-mono text-gray-600">k6: http_req_duration{p(95)}</p>
+
+
+                                </div>
+
+
+                                <p class="text-xs text-gray-600">
+
+
+                                    <strong>Justification :</strong> Impact direct sur le taux de conversion. P95
+                                    surveill pour
+
+
+                                    garantir l'expérience de la majorité des utilisateurs.
+
+
+                                </p>
+
+
+                            </div>
+
+
+                            <!-- Signal 2: Traffic -->
+
+
+                            <div class="bg-white border-l-4 border-green-500 rounded-lg p-4 shadow-sm">
+
+
+                                <h4 class="font-bold text-gray-800 flex items-center mb-2">
+
+
+                                    <i class="fas fa-globe text-green-500 mr-2"></i> Trafic (Traffic)
+
+
+                                </h4>
+
+
+                                <div class="bg-gray-50 rounded p-2 mb-2">
+
+
+                                    <p class="text-xs font-mono text-gray-600">k6: http_reqs/s ou ALB RequestCount</p>
+
+
+                                </div>
+
+
+                                <p class="text-xs text-gray-600">
+
+
+                                    <strong>Justification :</strong> Indicateur principal de charge système. Sert de
+                                    déclencheur
+
+
+                                    pour l'auto-scaling (HPA).
+
+
+                                </p>
+
+
+                            </div>
+
+
+                            <!-- Signal 3: Errors -->
+
+
+                            <div class="bg-white border-l-4 border-red-500 rounded-lg p-4 shadow-sm">
+
+
+                                <h4 class="font-bold text-gray-800 flex items-center mb-2">
+
+
+                                    <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Erreurs (Errors)
+
+
+                                </h4>
+
+
+                                <div class="bg-gray-50 rounded p-2 mb-2">
+
+
+                                    <p class="text-xs font-mono text-gray-600">k6: http_req_failed ou ALB 5xx</p>
+
+
+                                </div>
+
+
+                                <p class="text-xs text-gray-600">
+
+
+                                    <strong>Justification :</strong> Mesure la santé fonctionnelle. Les 5xx indiquent un
+                                    échec
+
+
+                                    serveur critique nécessitant une intervention immédiate.
+
+
+                                </p>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- Column 3: Alerting Strategy (The WHEN) -->
+
+
+                    <div class="flex-[1.2] flex flex-col gap-4">
+
+
+                        <div class="flex items-center justify-between border-b-2 border-red-500 pb-2 mb-2">
+
+
+                            <h3 class="font-bold text-aws-dark text-lg"><i class="fas fa-bell mr-2"></i>Politique
+                                d'Alerting
+
+
+                            </h3>
+
+
+                            <span class="text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded font-bold">Actionable
+                                Only</span>
+
+
+                        </div>
+
+
+                        <!-- Alerting Philosophy -->
+
+
+                        <div
+                            class="bg-gray-100 rounded-lg p-3 text-xs text-gray-600 mb-2 italic border border-gray-200">
+
+
+                            <i class="fas fa-quote-left mr-2 text-gray-400"></i>
+
+
+                            Chaque alerte doit nécessiter une action humaine immédiate. Si non, c'est un log ou un
+                            dashboard,
+
+
+                            pas une alerte.
+
+
+                        </div>
+
+
+                        <!-- Alert Table -->
+
+
+                        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex-1">
+
+
+                            <table class="w-full text-left border-collapse">
+
+
+                                <thead
+                                    class="bg-gray-50 text-xs text-gray-500 uppercase font-bold border-b border-gray-200">
+
+
+                                    <tr>
+
+
+                                        <th class="p-3 w-20">Niveau</th>
+
+
+                                        <th class="p-3">Seuil &amp; Condition</th>
+
+
+                                        <th class="p-3">Rationale (Pourquoi ?)</th>
+
+
+                                    </tr>
+
+
+                                </thead>
+
+
+                                <tbody class="text-xs">
+
+
+                                    <!-- Critical Alert -->
+
+
+                                    <tr class="border-b border-gray-100 bg-red-50">
+
+
+                                        <td class="p-3">
+
+
+                                            <span
+                                                class="bg-red-500 text-white px-2 py-1 rounded font-bold text-[10px]">CRITICAL</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 font-medium text-red-900">
+
+
+                                            Erreur 5xx &gt; 2%<br />
+
+
+                                            <span class="text-gray-500 font-normal">pendant 2 min</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 text-gray-600">
+
+
+                                            Impact utilisateur direct. Signifie que le service est cass pour 900+
+                                            utilisateurs
+
+
+                                            (sur 90K).
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <!-- High Latency Alert -->
+
+
+                                    <tr class="border-b border-gray-100">
+
+
+                                        <td class="p-3">
+
+
+                                            <span
+                                                class="bg-orange-500 text-white px-2 py-1 rounded font-bold text-[10px]">PAGE</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 font-medium text-gray-800">
+
+
+                                            Latency P95 &gt; 2s (k6)<br />
+
+
+                                            <span class="text-gray-500 font-normal">pendant 5 min</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 text-gray-600">
+
+
+                                            Dégradation UX majeure. Risque élevé d'abandon de panier au-delà de 2s.
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <!-- Saturation Alert -->
+
+
+                                    <tr class="border-b border-gray-100">
+
+
+                                        <td class="p-3">
+
+
+                                            <span
+                                                class="bg-yellow-500 text-white px-2 py-1 rounded font-bold text-[10px]">WARN</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 font-medium text-gray-800">
+
+
+                                            CPU Node &gt; 80% (kubectl top)<br />
+
+
+                                            <span class="text-gray-500 font-normal">pendant 10 min</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 text-gray-600">
+
+
+                                            Indique une sous-capacité du Cluster Autoscaler ou un problème de quota.
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                    <!-- Pod Restart Alert -->
+
+
+                                    <tr class="border-b border-gray-100">
+
+
+                                        <td class="p-3">
+
+
+                                            <span
+                                                class="bg-blue-500 text-white px-2 py-1 rounded font-bold text-[10px]">TICKET</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 font-medium text-gray-800">
+
+
+                                            Pod CrashLoopBackOff (kubectl get events)<br />
+
+
+                                            <span class="text-gray-500 font-normal">&gt; 5 restarts</span>
+
+
+                                        </td>
+
+
+                                        <td class="p-3 text-gray-600">
+
+
+                                            Instabilité applicative (OOMKilled ou bug), mais le service reste
+                                            partiellement up
+
+
+                                            grâce aux replicas.
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
 
 
                 </div>
 
 
-                <div class="grid grid-cols-1 gap-4 flex-1">
+                <!-- Footer -->
 
 
-                    <!-- Signal 1: Latency -->
+                <div
+                    class="h-10 bg-white border-t border-gray-200 flex justify-between items-center px-12 text-xs text-gray-400 font-medium z-10">
 
 
-                    <div class="bg-white border-l-4 border-yellow-500 rounded-lg p-4 shadow-sm">
+                    <p>HETIC - Projet Black Friday Survival</p>
 
 
-                        <h4 class="font-bold text-gray-800 flex items-center mb-2">
-
-
-                            <i class="fas fa-clock text-yellow-500 mr-2"></i> Latence (Latency)
-
-
-                        </h4>
-
-
-                        <div class="bg-gray-50 rounded p-2 mb-2">
-
-
-                            <p class="text-xs font-mono text-gray-600">k6: http_req_duration{p(95)}</p>
-
-
-                        </div>
-
-
-                        <p class="text-xs text-gray-600">
-
-
-                            <strong>Justification :</strong> Impact direct sur le taux de conversion. P95 surveill pour
-
-
-                            garantir l'exprience de la majorit des utilisateurs.
-
-
-                        </p>
-
-
-                    </div>
-
-
-                    <!-- Signal 2: Traffic -->
-
-
-                    <div class="bg-white border-l-4 border-green-500 rounded-lg p-4 shadow-sm">
-
-
-                        <h4 class="font-bold text-gray-800 flex items-center mb-2">
-
-
-                            <i class="fas fa-globe text-green-500 mr-2"></i> Trafic (Traffic)
-
-
-                        </h4>
-
-
-                        <div class="bg-gray-50 rounded p-2 mb-2">
-
-
-                            <p class="text-xs font-mono text-gray-600">k6: http_reqs/s ou ALB RequestCount</p>
-
-
-                        </div>
-
-
-                        <p class="text-xs text-gray-600">
-
-
-                            <strong>Justification :</strong> Indicateur principal de charge systme. Sert de dclencheur
-
-
-                            pour l'auto-scaling (HPA).
-
-
-                        </p>
-
-
-                    </div>
-
-
-                    <!-- Signal 3: Errors -->
-
-
-                    <div class="bg-white border-l-4 border-red-500 rounded-lg p-4 shadow-sm">
-
-
-                        <h4 class="font-bold text-gray-800 flex items-center mb-2">
-
-
-                            <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Erreurs (Errors)
-
-
-                        </h4>
-
-
-                        <div class="bg-gray-50 rounded p-2 mb-2">
-
-
-                            <p class="text-xs font-mono text-gray-600">k6: http_req_failed ou ALB 5xx</p>
-
-
-                        </div>
-
-
-                        <p class="text-xs text-gray-600">
-
-
-                            <strong>Justification :</strong> Mesure la sant fonctionnelle. Les 5xx indiquent un chec
-
-
-                            serveur critique ncessitant une intervention immdiate.
-
-
-                        </p>
-
-
-                    </div>
+                    <p>Page 7</p>
 
 
                 </div>
@@ -557,331 +830,49 @@
             </div>
 
 
-            <!-- Column 3: Alerting Strategy (The WHEN) -->
+            <script>
 
 
-            <div class="flex-[1.2] flex flex-col gap-4">
+                (function () {
 
 
-                <div class="flex items-center justify-between border-b-2 border-red-500 pb-2 mb-2">
+                    document.addEventListener('keydown', function (e) {
 
 
-                    <h3 class="font-bold text-aws-dark text-lg"><i class="fas fa-bell mr-2"></i>Politique d'Alerting
+                        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
 
 
-                    </h3>
+                            e.preventDefault();
 
 
-                    <span class="text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded font-bold">Actionable Only</span>
+                            if (window.parent !== window) {
 
 
-                </div>
+                                window.parent.postMessage({
 
 
-                <!-- Alerting Philosophy -->
+                                    type: 'slide-nav',
 
 
-                <div class="bg-gray-100 rounded-lg p-3 text-xs text-gray-600 mb-2 italic border border-gray-200">
+                                    key: e.key
 
 
-                    <i class="fas fa-quote-left mr-2 text-gray-400"></i>
+                                }, '*');
 
 
-                    Chaque alerte doit ncessiter une action humaine immdiate. Si non, c'est un log ou un dashboard,
+                            }
 
 
-                    pas une alerte.
+                        }
 
 
-                </div>
+                    });
 
 
-                <!-- Alert Table -->
+                })();
 
 
-                <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex-1">
-
-
-                    <table class="w-full text-left border-collapse">
-
-
-                        <thead class="bg-gray-50 text-xs text-gray-500 uppercase font-bold border-b border-gray-200">
-
-
-                            <tr>
-
-
-                                <th class="p-3 w-20">Niveau</th>
-
-
-                                <th class="p-3">Seuil &amp; Condition</th>
-
-
-                                <th class="p-3">Rationale (Pourquoi ?)</th>
-
-
-                            </tr>
-
-
-                        </thead>
-
-
-                        <tbody class="text-xs">
-
-
-                            <!-- Critical Alert -->
-
-
-                            <tr class="border-b border-gray-100 bg-red-50">
-
-
-                                <td class="p-3">
-
-
-                                    <span
-
-
-                                        class="bg-red-500 text-white px-2 py-1 rounded font-bold text-[10px]">CRITICAL</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 font-medium text-red-900">
-
-
-                                    Erreur 5xx &gt; 2%<br />
-
-
-                                    <span class="text-gray-500 font-normal">pendant 2 min</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 text-gray-600">
-
-
-                                    Impact utilisateur direct. Signifie que le service est cass pour 900+ utilisateurs
-
-
-                                    (sur 90K).
-
-
-                                </td>
-
-
-                            </tr>
-
-
-                            <!-- High Latency Alert -->
-
-
-                            <tr class="border-b border-gray-100">
-
-
-                                <td class="p-3">
-
-
-                                    <span
-
-
-                                        class="bg-orange-500 text-white px-2 py-1 rounded font-bold text-[10px]">PAGE</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 font-medium text-gray-800">
-
-
-                                    Latency P95 &gt; 2s (k6)<br />
-
-
-                                    <span class="text-gray-500 font-normal">pendant 5 min</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 text-gray-600">
-
-
-                                    Dgradation UX majeure. Risque lev d'abandon de panier au-del de 2s.
-
-
-                                </td>
-
-
-                            </tr>
-
-
-                            <!-- Saturation Alert -->
-
-
-                            <tr class="border-b border-gray-100">
-
-
-                                <td class="p-3">
-
-
-                                    <span
-
-
-                                        class="bg-yellow-500 text-white px-2 py-1 rounded font-bold text-[10px]">WARN</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 font-medium text-gray-800">
-
-
-                                    CPU Node &gt; 80% (kubectl top)<br />
-
-
-                                    <span class="text-gray-500 font-normal">pendant 10 min</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 text-gray-600">
-
-
-                                    Indique une sous-capacit du Cluster Autoscaler ou un problme de quota.
-
-
-                                </td>
-
-
-                            </tr>
-
-
-                            <!-- Pod Restart Alert -->
-
-
-                            <tr class="border-b border-gray-100">
-
-
-                                <td class="p-3">
-
-
-                                    <span
-
-
-                                        class="bg-blue-500 text-white px-2 py-1 rounded font-bold text-[10px]">TICKET</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 font-medium text-gray-800">
-
-
-                                    Pod CrashLoopBackOff (kubectl get events)<br />
-
-
-                                    <span class="text-gray-500 font-normal">&gt; 5 restarts</span>
-
-
-                                </td>
-
-
-                                <td class="p-3 text-gray-600">
-
-
-                                    Instabilit applicative (OOMKilled ou bug), mais le service reste partiellement up
-
-
-                                    grce aux replicas.
-
-
-                                </td>
-
-
-                            </tr>
-
-
-                        </tbody>
-
-
-                    </table>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-        <!-- Footer -->
-
-
-        <div
-
-
-            class="h-10 bg-white border-t border-gray-200 flex justify-between items-center px-12 text-xs text-gray-400 font-medium z-10">
-
-
-            <p>HETIC - Projet Black Friday Survival</p>
-
-
-            <p>Page 7</p>
-
-
-        </div>
-
-
-    </div>
-
-
-    <script>
-
-
-        (function () {
-
-
-            document.addEventListener('keydown', function (e) {
-
-
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-
-
-                    e.preventDefault();
-
-
-                    if (window.parent !== window) {
-
-
-                        window.parent.postMessage({
-
-
-                            type: 'slide-nav',
-
-
-                            key: e.key
-
-
-                        }, '*');
-
-
-                    }
-
-
-                }
-
-
-            });
-
-
-        })();
-
-
-    </script>
+            </script>
 
 
 </body>
