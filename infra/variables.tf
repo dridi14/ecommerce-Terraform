@@ -48,13 +48,14 @@ variable "node_instance_types" {
 variable "node_desired_size" {
   description = "Desired number of EKS worker nodes."
   type        = number
+
   default     = 3
 }
 
 variable "node_min_size" {
   description = "Minimum number of EKS worker nodes."
   type        = number
-  default     = 3
+  default     = 2  
 }
 
 variable "node_max_size" {
@@ -73,6 +74,8 @@ variable "tags" {
   description = "Additional tags to apply to resources."
   type        = map(string)
   default     = {}
+  default     = 100
+  default     = 2
 }
 
 
@@ -129,6 +132,7 @@ variable "monthly_budget_limit" {
   default     = 500
 }
 
+
 variable "enable_secrets_manager" {
   description = "Create an AWS Secrets Manager secret for application secrets."
   type        = bool
@@ -140,4 +144,49 @@ variable "app_secrets_json" {
   type        = string
   default     = ""
   sensitive   = true
+
+# --- DocumentDB (Managed Mongo-Compatible) ---
+
+variable "docdb_enabled" {
+  description = "Whether to provision Amazon DocumentDB."
+  type        = bool
+  default     = true
+}
+
+variable "docdb_instance_class" {
+  description = "DocumentDB instance class."
+  type        = string
+  default     = "db.t3.medium"
+}
+
+variable "docdb_instance_count" {
+  description = "Number of DocumentDB instances."
+  type        = number
+  default     = 1
+}
+
+variable "docdb_username" {
+  description = "DocumentDB master username."
+  type        = string
+  default     = "grandnodeadmin"
+}
+
+variable "docdb_password" {
+  description = "DocumentDB master password."
+  type        = string
+  sensitive   = true
+  default     = "ChangeMeDocDBPass123"
+}
+
+variable "docdb_backup_retention_days" {
+  description = "DocumentDB backup retention days."
+  type        = number
+  default     = 1
+}
+
+variable "docdb_skip_final_snapshot" {
+  description = "Skip final snapshot on delete (dev friendly)."
+  type        = bool
+  default     = true
+
 }

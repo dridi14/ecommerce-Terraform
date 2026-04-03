@@ -22,12 +22,28 @@ spec:
       labels:
         app: grandnode2
     spec:
+      {{- if .Values.docdb.tls.enabled }}
+      volumes:
+        - name: docdb-ca-bundle
+          configMap:
+            name: {{ .Values.docdb.tls.caBundleConfigMap }}
+            items:
+              - key: {{ .Values.docdb.tls.caBundleKey }}
+                path: {{ .Values.docdb.tls.caBundleKey }}
+      {{- end }}
       containers:
         - name: grandnode2
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.container.port }}
+          {{- if .Values.docdb.tls.enabled }}
+          volumeMounts:
+            - name: docdb-ca-bundle
+              mountPath: {{ .Values.docdb.tls.mountPath }}
+              subPath: {{ .Values.docdb.tls.caBundleKey }}
+              readOnly: true
+          {{- end }}
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "{{ .Values.env.ASPNETCORE_ENVIRONMENT }}"
@@ -39,6 +55,20 @@ spec:
               value: "{{ .Values.env.CONNECTIONSTRINGS_PROVIDER }}"
             - name: FeatureManagement__Grand.Module.Installer
               value: "{{ .Values.env.FEATURE_INSTALLER }}"
+            - name: Redis__RedisPubSubEnabled
+              value: "{{ .Values.env.REDIS_PUBSUB_ENABLED }}"
+            - name: Redis__RedisPubSubConnectionString
+              value: "{{ .Values.env.REDIS_PUBSUB_CONNECTION }}"
+            - name: Redis__RedisPubSubChannel
+              value: "{{ .Values.env.REDIS_PUBSUB_CHANNEL }}"
+            - name: Redis__PersistKeysToRedis
+              value: "{{ .Values.env.REDIS_PERSIST_KEYS }}"
+            - name: Redis__PersistKeysToRedisUrl
+              value: "{{ .Values.env.REDIS_PERSIST_KEYS_URL }}"
+            {{- if .Values.docdb.tls.enabled }}
+            - name: SSL_CERT_FILE
+              value: "{{ .Values.docdb.tls.mountPath }}"
+            {{- end }}
           resources:
             requests:
               cpu: {{ .Values.resources.requests.cpu | quote }}

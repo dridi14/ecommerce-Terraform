@@ -109,7 +109,7 @@ public class InstallController : Controller
             model.AvailableCollation.Add(new SelectListItem {
                 Value = col.Value,
                 Text = col.Name,
-                Selected = installationLocalizedService.GetCurrentLanguage().Code == col.Value
+                Selected = string.IsNullOrEmpty(col.Value)
             });
 
         return model;
@@ -232,6 +232,8 @@ public class InstallController : Controller
             }
 
             var installationService = HttpContext.RequestServices.GetRequiredService<IInstallationService>();
+            if (model.DataProvider == DbProvider.DocumentDB)
+                model.Collation = null;
             await installationService.InstallData(
                 HttpContext.Request.Scheme, HttpContext.Request.Host,
                 model.AdminEmail, model.AdminPassword, model.Collation,
