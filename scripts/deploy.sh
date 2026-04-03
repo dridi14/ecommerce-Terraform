@@ -8,6 +8,13 @@ export ENV
 export AWS_REGION
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Load local .env if present (no export by default), then export all variables.
+if [[ -f "${ROOT_DIR}/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "${ROOT_DIR}/.env"
+  set +a
+fi
 INFRA_DIR="${ROOT_DIR}/infra"
 BUILD_IMAGE="${BUILD_IMAGE:-false}"
 IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-my-ecr-or-dockerhub/grandnode2}"
