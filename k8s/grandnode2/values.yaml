@@ -55,8 +55,8 @@ deploymentStrategy:
 
 autoscaling:
   enabled: true
-  minReplicas: 4
-  maxReplicas: 20
+  minReplicas: 2
+  maxReplicas: 200
   targetCPUUtilizationPercentage: 65
   targetMemoryUtilizationPercentage: 75
 
@@ -66,7 +66,20 @@ podDisruptionBudget:
 
 env:
   ASPNETCORE_ENVIRONMENT: "Production"
-  DB_CONNECTION_STRING: "mongodb://grandnodeadmin:ChangeMeMongoPass123@mongodb.grandnode2.svc.cluster.local:27017/grandnode2?authSource=grandnode2"
-  CONNECTIONSTRINGS_MONGODB: "mongodb://grandnodeadmin:ChangeMeMongoPass123@mongodb.grandnode2.svc.cluster.local:27017/grandnode2?authSource=grandnode2"
+  DB_CONNECTION_STRING: "mongodb://grandnodeadmin:ChangeMeDocDBPass123@docdb-endpoint:27017/grandnode2?tls=true&retryWrites=false"
+  CONNECTIONSTRINGS_MONGODB: "mongodb://grandnodeadmin:ChangeMeDocDBPass123@docdb-endpoint:27017/grandnode2?tls=true&retryWrites=false"
   CONNECTIONSTRINGS_PROVIDER: "0"
   FEATURE_INSTALLER: "true"
+  REDIS_ENABLED: "true"
+  REDIS_PUBSUB_ENABLED: "true"
+  REDIS_PUBSUB_CONNECTION: "redis-master.grandnode2.svc.cluster.local:6379,password=ChangeMeRedisPass123,allowAdmin=true"
+  REDIS_PUBSUB_CHANNEL: "grandnode2"
+  REDIS_PERSIST_KEYS: "true"
+  REDIS_PERSIST_KEYS_URL: "redis-master.grandnode2.svc.cluster.local:6379,password=ChangeMeRedisPass123,allowAdmin=true,defaultDatabase=1"
+
+docdb:
+  tls:
+    enabled: false
+    caBundleConfigMap: "grandnode2-docdb-ca"
+    caBundleKey: "rds-combined-ca-bundle.pem"
+    mountPath: "/etc/ssl/certs/rds-combined-ca-bundle.pem"

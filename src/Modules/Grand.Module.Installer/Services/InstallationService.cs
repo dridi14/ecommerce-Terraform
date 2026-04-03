@@ -1002,14 +1002,17 @@ public partial class InstallationService : IInstallationService
 
     private async Task CreateTables(string? local)
     {
-        if (string.IsNullOrEmpty(local))
-            return;
-
         try
         {
             var configuration = _serviceProvider.GetRequiredService<IConfiguration>();
             var dataSettings = DataSettingsManager.Instance.LoadSettings(true);
-            var dbContext = _serviceProvider.GetRequiredService<IDatabaseFactoryContext>().GetDatabaseContext(configuration[SettingsConstants.ConnectionStrings]);
+
+            // DocumentDB does not support collection-level collation; ignore any collation input.
+            if (dataSettings.DbProvider == DbProvider.DocumentDB)
+                local = string.Empty;
+
+            var dbContext = _serviceProvider.GetRequiredService<IDatabaseFactoryContext>()
+                .GetDatabaseContext(configuration[SettingsConstants.ConnectionStrings]);
             if (dataSettings.DbProvider != DbProvider.LiteDB)
             {
                 var typeSearcher = _serviceProvider.GetRequiredService<ITypeSearcher>();
@@ -1017,7 +1020,7 @@ public partial class InstallationService : IInstallationService
 
                 foreach (var item in q!.GetTypes())
                     if (item.BaseType != null && item.IsClass && item.BaseType == typeof(BaseEntity))
-                        await dbContext.CreateTable(item.Name, local);
+                        await dbContext.CreateTable(item.Name, local ?? string.Empty);
 
                 await CreateIndexes(dbContext, dataSettings);
             }

@@ -1,0 +1,10 @@
+{{- if .Values.docdb.tls.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.docdb.tls.caBundleConfigMap }}
+  namespace: grandnode2
+data:
+  {{ .Values.docdb.tls.caBundleKey }}: |
+{{ .Files.Get "files/rds-combined-ca-bundle.pem" | indent 4 }}
+{{- end }}

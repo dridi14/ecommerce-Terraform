@@ -48,19 +48,19 @@ variable "node_instance_types" {
 variable "node_desired_size" {
   description = "Desired number of EKS worker nodes."
   type        = number
-  default     = 4
+  default     = 2
 }
 
 variable "node_min_size" {
   description = "Minimum number of EKS worker nodes."
   type        = number
-  default     = 4
+  default     = 2
 }
 
 variable "node_max_size" {
   description = "Maximum number of EKS worker nodes."
   type        = number
-  default     = 12
+  default     = 100
 }
 
 variable "cluster_log_retention_in_days" {
@@ -111,4 +111,49 @@ variable "monthly_budget_limit" {
   description = "Monthly budget limit for billing alarm"
   type        = number
   default     = 500
+}
+
+# --- DocumentDB (Managed Mongo-Compatible) ---
+
+variable "docdb_enabled" {
+  description = "Whether to provision Amazon DocumentDB."
+  type        = bool
+  default     = true
+}
+
+variable "docdb_instance_class" {
+  description = "DocumentDB instance class."
+  type        = string
+  default     = "db.t3.medium"
+}
+
+variable "docdb_instance_count" {
+  description = "Number of DocumentDB instances."
+  type        = number
+  default     = 1
+}
+
+variable "docdb_username" {
+  description = "DocumentDB master username."
+  type        = string
+  default     = "grandnodeadmin"
+}
+
+variable "docdb_password" {
+  description = "DocumentDB master password."
+  type        = string
+  sensitive   = true
+  default     = "ChangeMeDocDBPass123"
+}
+
+variable "docdb_backup_retention_days" {
+  description = "DocumentDB backup retention days."
+  type        = number
+  default     = 1
+}
+
+variable "docdb_skip_final_snapshot" {
+  description = "Skip final snapshot on delete (dev friendly)."
+  type        = bool
+  default     = true
 }
