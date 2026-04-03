@@ -13,7 +13,7 @@ variable "project_name" {
 variable "instance_type" {
   description = "EC2 instance type used for k6 load tests"
   type        = string
-  default     = "t3.small"
+  default     = "t3.medium"
 }
 
 variable "key_name" {
